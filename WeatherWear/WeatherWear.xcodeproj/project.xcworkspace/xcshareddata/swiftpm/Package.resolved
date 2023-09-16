@@ -1,0 +1,41 @@
+{
+  "pins" : [
+    {
+      "identity" : "reactorkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ReactorKit/ReactorKit",
+      "state" : {
+        "revision" : "8fa33f09c6f6621a2aa536d739956d53b84dd139",
+        "version" : "3.2.0"
+      }
+    },
+    {
+      "identity" : "rxswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ReactiveX/RxSwift",
+      "state" : {
+        "branch" : "main",
+        "revision" : "2ff073fc1b9c600ac9b54734aff3348110437c19"
+      }
+    },
+    {
+      "identity" : "snapkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SnapKit/SnapKit",
+      "state" : {
+        "branch" : "develop",
+        "revision" : "58320fe80522414bf3a7e24c88123581dc586752"
+      }
+    },
+    {
+      "identity" : "weakmaptable",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ReactorKit/WeakMapTable.git",
+      "state" : {
+        "revision" : "cb05d64cef2bbf51e85c53adee937df46540a74e",
+        "version" : "1.2.1"
+      }
+    }
+  ],
+  "version" : 2
+}
