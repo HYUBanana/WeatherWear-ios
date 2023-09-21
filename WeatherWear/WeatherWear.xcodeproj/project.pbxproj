@@ -23,6 +23,7 @@
 		D9FA08BA2AB5B937005EC223 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9FA08B82AB5B937005EC223 /* HomeView.swift */; };
 		D9FA08BB2AB5B937005EC223 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9FA08B92AB5B937005EC223 /* HomeViewController.swift */; };
 		D9FA08BD2AB5B96A005EC223 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9FA08BC2AB5B96A005EC223 /* BaseViewController.swift */; };
+		D9FA08D22ABCF7FC005EC223 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = D9FA08D12ABCF7FC005EC223 /* Then */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +67,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D9FA08AB2AB5A6CD005EC223 /* RxSwift in Frameworks */,
+				D9FA08D22ABCF7FC005EC223 /* Then in Frameworks */,
 				D9FA08AE2AB5A6E4005EC223 /* SnapKit in Frameworks */,
 				D9FA08A92AB5A6CD005EC223 /* RxRelay in Frameworks */,
 				D9FA08B12AB5A6F6005EC223 /* ReactorKit in Frameworks */,
@@ -173,6 +175,7 @@
 				D9FA08AA2AB5A6CD005EC223 /* RxSwift */,
 				D9FA08AD2AB5A6E4005EC223 /* SnapKit */,
 				D9FA08B02AB5A6F6005EC223 /* ReactorKit */,
+				D9FA08D12ABCF7FC005EC223 /* Then */,
 			);
 			productName = WeatherWear;
 			productReference = D9FA08722AB5A63B005EC223 /* WeatherWear.app */;
@@ -250,6 +253,7 @@
 				D9FA08A52AB5A6CD005EC223 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				D9FA08AC2AB5A6E4005EC223 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				D9FA08AF2AB5A6F6005EC223 /* XCRemoteSwiftPackageReference "ReactorKit" */,
+				D9FA08D02ABCF7FC005EC223 /* XCRemoteSwiftPackageReference "Then" */,
 			);
 			productRefGroup = D9FA08732AB5A63B005EC223 /* Products */;
 			projectDirPath = "";
@@ -656,6 +660,14 @@
 				minimumVersion = 3.0.0;
 			};
 		};
+		D9FA08D02ABCF7FC005EC223 /* XCRemoteSwiftPackageReference "Then" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devxoul/Then";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -683,6 +695,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D9FA08AF2AB5A6F6005EC223 /* XCRemoteSwiftPackageReference "ReactorKit" */;
 			productName = ReactorKit;
+		};
+		D9FA08D12ABCF7FC005EC223 /* Then */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D9FA08D02ABCF7FC005EC223 /* XCRemoteSwiftPackageReference "Then" */;
+			productName = Then;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
