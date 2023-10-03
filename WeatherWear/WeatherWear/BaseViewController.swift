@@ -9,10 +9,11 @@ import UIKit
 import SnapKit
 
 class BaseViewController<T: UIView>: UIViewController {
-    var contentView: UIView { self.view }
+    var contentView: T!
     
     override func loadView() {
-        self.view = T()
+        contentView = T(frame: UIScreen.main.bounds)
+        self.view = contentView
     }
     
     override func viewDidLoad() {
