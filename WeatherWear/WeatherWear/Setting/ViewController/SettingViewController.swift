@@ -11,11 +11,6 @@ class SettingViewController: BaseViewController<SettingView> {
     // 테스트 코드
     let sections = ["위치", "외출 시간", "단위", "자동 정렬"]
     
-    var locations = ["서울특별시 성동구", "서울특별시 강남구", "프랑스 파리"]
-    var times = ["지금 있는 곳", "24일, 10시 12분", "24일, 3시 12분"]
-    var temperatures = [30, 31, 20]
-    var weathers = ["🌤️구름 조금", "🌤️구름 조금", "🌙맑음"]
-    
     let outingTimes = ["08시 00분에 나가서,", "19시 00분에 돌아와요.", "총 11시간 00분"]
     
     let degreeOptions = ["온도", "바람"]
@@ -23,6 +18,10 @@ class SettingViewController: BaseViewController<SettingView> {
     
     let autoOptions = ["오늘의 브리핑", "자세히"]
     let autoOptionSegmentTitles = [[(0, "자동"), (1, "수동")], [(0, "자동"), (1, "수동")]]
+    
+    let provider: ServiceProviderType
+    
+    var userLocations: [UserLocation]?
     
     var selectedRadioButtonIndex: IndexPath?
     
@@ -45,13 +44,20 @@ class SettingViewController: BaseViewController<SettingView> {
                                        alpha: 1.0)
     }
     
+    init(serviceProvider: ServiceProviderType) {
+        self.provider = serviceProvider
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         registerCells()
-        
-        self.contentView.collectionView.dataSource = settingViewDataSource
-        self.contentView.collectionView.delegate = settingViewDelegate
+        loadData()
     }
     
     private func registerCells() {
@@ -59,6 +65,16 @@ class SettingViewController: BaseViewController<SettingView> {
         self.contentView.collectionView.register(OutingTimeCell.self, forCellWithReuseIdentifier: "OutingTimeCell")
         self.contentView.collectionView.register(OptionCollectionView.self, forCellWithReuseIdentifier: "OptionCollectionViewCell")
         self.contentView.collectionView.register(SettingHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
+    }
+    
+    private func loadData() {
+        provider.userLocationService.getUserLocoation { [weak self] userLocations in
+            guard let userLocations = userLocations else { return }
+            self?.userLocations = userLocations
+            self?.contentView.collectionView.dataSource = self?.settingViewDataSource
+            self?.contentView.collectionView.delegate = self?.settingViewDelegate
+            self?.contentView.collectionView.reloadData()
+        }
     }
 }
 
@@ -78,8 +94,10 @@ extension SettingViewController {
         
         func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
             guard let viewController = viewController else { return 0 }
+            guard let userLocations = viewController.userLocations else { return 0 }
+            
             if section == 0 {
-                return viewController.locations.count
+                return userLocations.count
             }
             else if section == 1 {
                 return 1
@@ -95,21 +113,26 @@ extension SettingViewController {
         
         func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
             guard let viewController = viewController else { return UICollectionViewCell() }
+            guard let userLocations = viewController.userLocations else { return UserLocationCell() }
             
             if indexPath.section == 0 {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserLocationCell", for: indexPath) as! UserLocationCell
-                if indexPath == viewController.selectedRadioButtonIndex {
+                
+                let userLocation = userLocations[indexPath.item]
+                if userLocation.isSelected {
                     cell.radioButton.isSelected = true
                 } else {
                     cell.radioButton.isSelected = false
                 }
-                cell.locationLabel.text = viewController.locations[indexPath.item]
-                cell.timeLabel.text = viewController.times[indexPath.item]
-                cell.temperatureLabel.text = String(viewController.temperatures[indexPath.item]) + "°"
-                cell.weatherLabel.text = viewController.weathers[indexPath.item]
+                
+                cell.locationLabel.text = userLocation.location
+                cell.timeLabel.text = userLocation.time
+                cell.temperatureLabel.text = userLocation.temperatureString
+                cell.weatherLabel.text = userLocation.weather
                 cell.delegate = viewController
                 return cell
             }
+            
             else if indexPath.section == 1 {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "OutingTimeCell", for: indexPath) as! OutingTimeCell
                 cell.delegate = viewController
@@ -173,22 +196,27 @@ extension SettingViewController {
         }
         
         func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+            guard let viewController = viewController else { return }
+            guard let userLocations = viewController.userLocations else { return }
+            let provider = viewController.provider
             if indexPath.section == 0 {
-                if let previousSelectedIndex = viewController?.selectedRadioButtonIndex {
-                    let previousCell = collectionView.cellForItem(at: previousSelectedIndex) as! UserLocationCell
-                    previousCell.radioButton.isSelected = false
+                
+                guard let previousSelectedIndex = userLocations.firstIndex(where: { $0.isSelected }) else { return }
+                let currentSelectedIndex = indexPath.item
+                
+                provider.userLocationService.userLocationSelected(previous: previousSelectedIndex, next: currentSelectedIndex) { userLocations in
+                    guard let userLocations = userLocations else { return }
+                    viewController.userLocations = userLocations
+                    let previousIndexPath = IndexPath(item: previousSelectedIndex, section: 0)
+                    let currentIndexPath = IndexPath(item: currentSelectedIndex, section: 0)
+                    viewController.contentView.collectionView.reloadItems(at: [previousIndexPath, currentIndexPath])
                 }
-                
-                let currentCell = collectionView.cellForItem(at: indexPath) as! UserLocationCell
-                currentCell.radioButton.isSelected = true
-                
-                viewController?.selectedRadioButtonIndex = indexPath
             }
             
             else if indexPath.section == 1 {
                 let alertController = UIAlertController(title: "", message: "대충 시간 설정하는 화면", preferredStyle: .alert)
                 alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                viewController?.present(alertController, animated: true)
+                viewController.present(alertController, animated: true)
             }
         }
         
@@ -240,6 +268,7 @@ extension SettingViewController {
             cell.segmentControl.isUserInteractionEnabled = true
             
             let segmentTitles = viewController.degreeOptionSegmentTitles[indexPath.item]
+            cell.segmentControl.removeAllSegments()
             for (index, title) in segmentTitles {
                 cell.segmentControl.insertSegment(withTitle: title, at: index, animated: false)
             }
@@ -288,6 +317,7 @@ extension SettingViewController {
             cell.segmentControl.isUserInteractionEnabled = true
             
             let segmentTitles = viewController.autoOptionSegmentTitles[indexPath.item]
+            cell.segmentControl.removeAllSegments()
             for (index, title) in segmentTitles {
                 cell.segmentControl.insertSegment(withTitle: title, at: index, animated: false)
             }
@@ -312,8 +342,11 @@ extension SettingViewController {
 
 extension SettingViewController: SettingHeaderDelegate {
     func plusButtonTapped() {
-        locations.append("냥냥~")
-        self.contentView.collectionView.reloadData()
+        provider.userLocationService.addUserLocation { userLocations in
+            guard let userLocations = userLocations else { return }
+            self.userLocations = userLocations
+            self.contentView.collectionView.reloadData()
+        }
     }
 }
 
@@ -323,13 +356,14 @@ extension SettingViewController: UserLocationCellDelegate {
         UIView.animate(withDuration: 0.15, animations: {
             cell.transform = CGAffineTransform(scaleX: 0.97, y: 0.97)
         }) { _ in
-            UIView.animate(withDuration: 0.15) {
+            UIView.animate(withDuration: 0.15, animations: {
                 cell.transform = CGAffineTransform.identity
+            }) { [weak self] _ in
+                guard let collectionView = self?.contentView.collectionView else { return }
+                guard let indexPath = collectionView.indexPath(for: cell) else { return }
+                
+                self?.settingViewDelegate.collectionView(collectionView, didSelectItemAt: indexPath)
             }
-        }
-        
-        if let indexPath = contentView.collectionView.indexPath(for: cell) {
-            settingViewDelegate.collectionView(contentView.collectionView, didSelectItemAt: indexPath)
         }
     }
     

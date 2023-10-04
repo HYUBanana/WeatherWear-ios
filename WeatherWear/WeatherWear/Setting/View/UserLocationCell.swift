@@ -56,9 +56,6 @@ class UserLocationCell: UICollectionViewCell {
                                                alpha: 1.0)
     }
     
-    var deleteButton: UIButton!
-    var originalCellContentCenter: CGPoint!
-    
     lazy var radioButton = UIButton().then {
         $0.setImage(UIImage(systemName: "circle")?.withTintColor(.lightGray, renderingMode: .alwaysOriginal), for: .normal)
         $0.setImage(UIImage(systemName: "checkmark.circle.fill")?.withTintColor(Color.blueColor, renderingMode: .alwaysOriginal), for: .selected)
