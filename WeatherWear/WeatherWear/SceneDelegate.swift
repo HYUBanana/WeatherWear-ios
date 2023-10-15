@@ -16,10 +16,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let serviceProvider: ServiceProviderType = MockServiceProvider()
-        let mainViewController = SettingViewController(serviceProvider: serviceProvider)
+        let tabBarController = TabBarController(provider: serviceProvider)
 
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = mainViewController
+        window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
         
     }
