@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D925C26A2ACDD93E00075D5D /* TabBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D925C2692ACDD93E00075D5D /* TabBarItem.swift */; };
 		D925C26D2ACDF18200075D5D /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D925C26C2ACDF18200075D5D /* UIColor.swift */; };
+		D925C27C2ACF0C3200075D5D /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D925C27B2ACF0C3200075D5D /* UIImage.swift */; };
 		D95D71E42ACD426500739757 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D95D71E32ACD426500739757 /* TabBarController.swift */; };
 		D9EBA6A12ACC670E00CDA185 /* SettingHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9EBA6992ACC670E00CDA185 /* SettingHeader.swift */; };
 		D9EBA6A22ACC670E00CDA185 /* OptionCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9EBA69A2ACC670E00CDA185 /* OptionCollectionView.swift */; };
@@ -60,6 +61,7 @@
 /* Begin PBXFileReference section */
 		D925C2692ACDD93E00075D5D /* TabBarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarItem.swift; sourceTree = "<group>"; };
 		D925C26C2ACDF18200075D5D /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		D925C27B2ACF0C3200075D5D /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		D95D71E32ACD426500739757 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		D9EBA6992ACC670E00CDA185 /* SettingHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingHeader.swift; sourceTree = "<group>"; };
 		D9EBA69A2ACC670E00CDA185 /* OptionCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionCollectionView.swift; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				D925C26C2ACDF18200075D5D /* UIColor.swift */,
+				D925C27B2ACF0C3200075D5D /* UIImage.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -393,6 +396,7 @@
 				D95D71E42ACD426500739757 /* TabBarController.swift in Sources */,
 				D9EBA6AF2ACC671400CDA185 /* UserLocationService.swift in Sources */,
 				D9EBA6A42ACC670E00CDA185 /* UserLocationCell.swift in Sources */,
+				D925C27C2ACF0C3200075D5D /* UIImage.swift in Sources */,
 				D9EBA6B52ACC673300CDA185 /* UserLocation.swift in Sources */,
 				D9EBA6AE2ACC671400CDA185 /* DegreeOptionService.swift in Sources */,
 				D9EBA6B12ACC671400CDA185 /* ServiceProvider.swift in Sources */,
