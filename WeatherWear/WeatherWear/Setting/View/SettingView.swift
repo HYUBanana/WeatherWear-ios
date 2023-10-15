@@ -20,10 +20,7 @@ final class SettingView: UIView {
     }
     
     struct Color {
-        static let backgroundColor = UIColor(red: 240.0 / 255.0,
-                                             green: 240.0 / 255.0,
-                                             blue: 240.0 / 255.0,
-                                             alpha: 1.0)
+        static let backgroundColor = UIColor(red: 240, green: 240, blue: 240)
     }
     
     let layout = UICollectionViewFlowLayout().then {

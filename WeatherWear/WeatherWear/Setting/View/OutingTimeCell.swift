@@ -28,18 +28,9 @@ final class OutingTimeCell: UICollectionViewCell {
     }
     
     struct Color {
-        static let outingTimeLabel = UIColor(red: 48.0 / 255.0,
-                                                green: 48.0 / 255.0,
-                                                blue: 48.0 / 255.0,
-                                                alpha: 1.0)
-        static let totalTimeLabel = UIColor(red: 91.0 / 255.0,
-                                            green: 91.0 / 255.0,
-                                            blue: 91.0 / 255.0,
-                                            alpha: 1.0)
-        static let blueColor = UIColor(red: 36.0 / 255.0,
-                                       green: 160.0 / 255.0,
-                                       blue: 237.0 / 255.0,
-                                       alpha: 1.0)
+        static let outingTimeLabel = UIColor(red: 48, green: 48, blue: 48)
+        static let totalTimeLabel = UIColor(red: 91, green: 91, blue: 91)
+        static let blueColor = UIColor(red: 36, green: 160, blue: 237)
     }
     
     let departureTimeLabel = UILabel().then {

@@ -33,14 +33,8 @@ class TabBarController: UITabBarController {
     }
     
     struct Color {
-        static let normalColor = UIColor(red: 143.0 / 255.0,
-                                             green: 143.0 / 255.0,
-                                             blue: 143.0 / 255.0,
-                                             alpha: 1.0)
-        static let selectedColor = UIColor(red: 48.0 / 255.0,
-                                           green: 48.0 / 255.0,
-                                           blue: 48.0 / 255.0,
-                                           alpha: 1.0)
+        static let normalColor = UIColor(red: 143, green: 143, blue: 143)
+        static let selectedColor = UIColor(red: 48, green: 48, blue: 48)
         static let shadowColor = UIColor.black
     }
     

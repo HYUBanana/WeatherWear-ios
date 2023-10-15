@@ -21,14 +21,8 @@ final class SettingHeader: UICollectionReusableView {
     }
     
     struct Color {
-        static let titleLabel = UIColor(red: 48.0 / 255.0,
-                                        green: 48.0 / 255.0,
-                                        blue: 48.0 / 255.0,
-                                        alpha: 1.0)
-        static let plusButton = UIColor(red: 48.0 / 255.0,
-                                        green: 48.0 / 255.0,
-                                        blue: 48.0 / 255.0,
-                                        alpha: 1.0)
+        static let titleLabel = UIColor(red: 48, green: 48, blue: 48)
+        static let plusButton = UIColor(red: 48, green: 48, blue: 48)
     }
     
     struct Font {

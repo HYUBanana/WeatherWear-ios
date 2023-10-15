@@ -10,10 +10,7 @@ import UIKit
 final class SettingSegmentedControl: UISegmentedControl {
     
     struct Color {
-        static let blueColor = UIColor(red: 36.0 / 255.0,
-                                       green: 160.0 / 255.0,
-                                       blue: 237.0 / 255.0,
-                                       alpha: 1.0)
+        static let blueColor = UIColor(red: 36, green: 160, blue: 237)
     }
     
     override init(items: [Any]?) {
