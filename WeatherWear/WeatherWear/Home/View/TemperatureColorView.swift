@@ -10,8 +10,7 @@ import SnapKit
 
 class TemperatureColorView: UIView {
     
-    var temperature: CGFloat?
-    var color: UIColor?
+    var weather: Weather?
     
     struct Metric {
         static let lowestTemperature: CGFloat = -10
@@ -45,6 +44,10 @@ class TemperatureColorView: UIView {
         setArrowColor()
     }
     
+    func configureData(with weather: Weather) {
+        self.weather = weather
+    }
+    
     private func setup() {
     }
     
@@ -61,8 +64,11 @@ class TemperatureColorView: UIView {
     }
     
     private func setArrowPosition() {
-        guard let temperature = temperature else { return }
-        let ratio = (temperature - Metric.lowestTemperature) / (Metric.highestTemperature - Metric.lowestTemperature)
+        guard let weather = self.weather else { return }
+        
+        let temperature = weather.briefingDatas[0].value
+        
+        let ratio = (CGFloat(temperature) - Metric.lowestTemperature) / (Metric.highestTemperature - Metric.lowestTemperature)
         let positionX = temperatureBar.frame.width * ratio - Metric.triangleArrowSize / 2
         
         triangleArrow.snp.makeConstraints { make in
@@ -73,7 +79,8 @@ class TemperatureColorView: UIView {
     }
     
     private func setArrowColor() {
-        guard let color = color else { return }
-        triangleArrow.color = color
+        guard let weather = self.weather else { return }
+        
+        triangleArrow.color = weather.briefingDatas[0].color
     }
 }

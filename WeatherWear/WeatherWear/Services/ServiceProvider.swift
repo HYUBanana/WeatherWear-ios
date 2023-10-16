@@ -10,18 +10,21 @@ protocol ServiceProviderType: AnyObject {
     var outingTimeService: OutingTimeServiceType { get }
     var degreeSettingService: DegreeOptionServiceType { get }
     var autoSettingService: AutoOptionServiceType { get }
+    var weatherService: WeatherServiceType { get }
 }
 
 final class ServiceProvider: ServiceProviderType {
-    lazy var userLocationService: UserLocationServiceType = UserLocationService()
-    lazy var outingTimeService: OutingTimeServiceType = OutingTimeService()
-    lazy var degreeSettingService: DegreeOptionServiceType = DegreeOptionService()
-    lazy var autoSettingService: AutoOptionServiceType = AutoOptionService()
+    var userLocationService: UserLocationServiceType = UserLocationService()
+    var outingTimeService: OutingTimeServiceType = OutingTimeService()
+    var degreeSettingService: DegreeOptionServiceType = DegreeOptionService()
+    var autoSettingService: AutoOptionServiceType = AutoOptionService()
+    var weatherService: WeatherServiceType = WeatherService()
 }
 
 final class MockServiceProvider: ServiceProviderType {
-    lazy var userLocationService: UserLocationServiceType = MockUserLocationService()
-    lazy var outingTimeService: OutingTimeServiceType = MockOutingTimeService()
-    lazy var degreeSettingService: DegreeOptionServiceType = MockDegreeOptionService()
-    lazy var autoSettingService: AutoOptionServiceType = MockAutoOptionService()
+    var userLocationService: UserLocationServiceType = MockUserLocationService()
+    var outingTimeService: OutingTimeServiceType = MockOutingTimeService()
+    var degreeSettingService: DegreeOptionServiceType = MockDegreeOptionService()
+    var autoSettingService: AutoOptionServiceType = MockAutoOptionService()
+    var weatherService: WeatherServiceType = MockWeatherService()
 }
