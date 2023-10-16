@@ -9,26 +9,23 @@ import UIKit
 
 class HomeViewController: BaseViewController<HomeView> {
     
+    let provider: ServiceProviderType
+    
+    var weather: Weather?
+    
     let sections = ["메인 텍스트", "캐릭터", "오늘의 브리핑", "생활 지수"]
-    
-    var mainTextCells = Array<String>()
-    
-    var adviceTitles = Array<String>()
-    var adviceDescriptions = Array<String>()
-    
-    var briefings = Array<String>()
-    var briefingIcon = Array<String>()
-    var briefingState = Array<String>()
-    var briefingDescription = Array<String>()
-    var briefingValue = Array<CGFloat>()
-    var briefingColor = Array<UIColor>()
-    
-    var comfortIndexIcon = Array<String>()
-    var comfortIndexValue = Array<String>()
-    var comfortIndexState = Array<String>()
     
     lazy var homeViewDataSource: HomeViewDataSource = HomeViewDataSource(viewController: self)
     lazy var homeViewDelegate: HomeViewDelegateFlowLayout = HomeViewDelegateFlowLayout()
+    
+    init(provider: ServiceProviderType) {
+        self.provider = provider
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,67 +44,12 @@ class HomeViewController: BaseViewController<HomeView> {
     }
     
     private func loadData() {
-        mainTextCells.append("7월 24일 월요일,")
-        mainTextCells.append("에어컨 없이는\n못 살아.🥵")
-        mainTextCells.append("오늘은 어제보다 더 덥고 습해서,\n실외활동은 자제하는 게 좋겠어요.\n다행히 비 소식은 없어요. ")
-        
-        adviceTitles.append("썬크림 필수")
-        adviceTitles.append("얇고 짧은 옷")
-        adviceTitles.append("우산 X")
-        
-        adviceDescriptions.append("자외선이 아주 강해요.")
-        adviceDescriptions.append("기온이 아주 높아요.")
-        adviceDescriptions.append("강수확률 없어요.")
-        
-        briefingIcon.append("🌡️")
-        briefingIcon.append("😎")
-        briefingIcon.append("😷")
-        briefingIcon.append("💨")
-        
-        briefings.append("체감온도")
-        briefings.append("자외선")
-        briefings.append("대기질")
-        briefings.append("바람")
-        
-        briefingState.append("아주 높음")
-        briefingState.append("아주 강함")
-        briefingState.append("좋음")
-        briefingState.append("약함")
-        
-        briefingDescription.append("체감 온도 최대 34도.\n어제보다 2도 더 높으며,\n건강에 위협적인 수준이에요.")
-        briefingDescription.append("자외선지수 최고 8.\n09시부터 17시 사이에는\n썬크림을 꼭 발라야 해요.")
-        briefingDescription.append("미세먼지 좋음 (23μg/m³)\n초미세먼지 좋음 (11μg/m³)\n오랜만에 맑은 공기네요.")
-        briefingDescription.append("최대 풍속 2m/s 정도로,\n약한 편이에요.")
-        
-        briefingValue.append(35)
-        briefingValue.append(30)
-        briefingValue.append(15)
-        briefingValue.append(0)
-        
-        briefingColor.append(UIColor(red: 255, green: 92, blue: 0))
-        briefingColor.append(UIColor(red: 255, green: 184, blue: 0))
-        briefingColor.append(UIColor(red: 88, green: 172, blue: 23))
-        briefingColor.append(UIColor(red: 36, green: 160, blue: 237))
-        
-        comfortIndexIcon.append("😡")
-        comfortIndexIcon.append("🧺")
-        comfortIndexIcon.append("🧽")
-        comfortIndexIcon.append("🌼")
-        
-        comfortIndexValue.append("불쾌 지수 80")
-        comfortIndexValue.append("빨래 지수 30")
-        comfortIndexValue.append("세차 지수 50")
-        comfortIndexValue.append("꽃가루 지수 10")
-        
-        comfortIndexState.append("아주 나쁨")
-        comfortIndexState.append("나쁨")
-        comfortIndexState.append("보통")
-        comfortIndexState.append("좋음")
-        
-        self.contentView.collectionView.dataSource = self.homeViewDataSource
-        self.contentView.collectionView.delegate = self.homeViewDelegate
-        
-        self.contentView.collectionView.reloadData()
+        provider.weatherService.getWeather { [weak self] weather in
+            self?.weather = weather
+            self?.contentView.collectionView.dataSource = self?.homeViewDataSource
+            self?.contentView.collectionView.delegate = self?.homeViewDelegate
+            self?.contentView.collectionView.reloadData()
+        }
     }
     
     private func setup() {
@@ -156,10 +98,10 @@ extension HomeViewController {
                 return 1
             }
             else if section == 2 {
-                return viewController.briefings.count
+                return viewController.weather?.briefingDatas.count ?? 0
             }
             else if section == 3 {
-                return viewController.comfortIndexValue.count
+                return viewController.weather?.comfortDatas.count ?? 0
             }
             return 0
         }
@@ -168,39 +110,52 @@ extension HomeViewController {
             guard let viewController = viewController else { return UICollectionViewCell() }
             
             if indexPath.section == 0 {
-                let mainTextCells = viewController.mainTextCells
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MainTextCell", for: indexPath) as! MainTextCell
-                cell.dateLabel.text = mainTextCells[0]
-                cell.mainLabel.text = mainTextCells[1]
-                cell.descriptionLabel.attributedText = mainTextCells[2].attributedStringWithLineSpacing(5)
+                cell.dateLabel.text = viewController.weather?.dateTitle
+                cell.mainLabel.text = viewController.weather?.title
+                cell.descriptionLabel.attributedText = viewController.weather?.description.attributedStringWithLineSpacing(5)
                 return cell
             } else if indexPath.section == 1 {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CharacterCell", for: indexPath) as! CharacterCell
-                cell.advicePositionView.faceAdvice.titleAdviceLabel.text = viewController.adviceTitles[0]
-                cell.advicePositionView.faceAdvice.subAdviceLabel.text = viewController.adviceDescriptions[0]
-                cell.advicePositionView.clothesAdvice.titleAdviceLabel.text = viewController.adviceTitles[1]
-                cell.advicePositionView.clothesAdvice.subAdviceLabel.text = viewController.adviceDescriptions[1]
-                cell.advicePositionView.itemAdvice.titleAdviceLabel.text = viewController.adviceTitles[2]
-                cell.advicePositionView.itemAdvice.subAdviceLabel.text = viewController.adviceDescriptions[2]
+                cell.temperatureLabel.text = viewController.weather?.temperatureString
+                cell.highestTemperatureLabel.text = viewController.weather?.highestTemperatureString
+                cell.lowestTemperatureLabel.text = viewController.weather?.lowestTemperatureString
+                
+                cell.weatherLabel.text = viewController.weather?.weatherConditionString
+                cell.weatherImageView.image = viewController.weather?.weatherConditionImage
+                
+                cell.locationLabel.text = viewController.weather?.location
+                cell.lastUpdateDateLabel.text = viewController.weather?.lastUpdatedDate
+                
+                cell.advicePositionView.faceAdvice.titleAdviceLabel.text = viewController.weather?.faceAdvice.title
+                cell.advicePositionView.faceAdvice.subAdviceLabel.text = viewController.weather?.faceAdvice.description
+                
+                cell.advicePositionView.clothesAdvice.titleAdviceLabel.text = viewController.weather?.clothesAdvice.title
+                cell.advicePositionView.clothesAdvice.subAdviceLabel.text = viewController.weather?.clothesAdvice.description
+                
+                cell.advicePositionView.itemAdvice.titleAdviceLabel.text = viewController.weather?.itemAdvice.title
+                cell.advicePositionView.itemAdvice.subAdviceLabel.text = viewController.weather?.itemAdvice.description
                 cell.delegate = viewController
                 return cell
-            } else if indexPath.section == 2 {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BriefingCell", for: indexPath) as! BriefingCell
-                cell.iconLabel.text = viewController.briefingIcon[indexPath.item]
-                cell.titleLabel.text = viewController.briefings[indexPath.item]
-                cell.stateLabel.text = viewController.briefingState[indexPath.item]
-                cell.descriptionLabel.attributedText = viewController.briefingDescription[indexPath.item].attributedStringWithLineSpacing(1)
-                cell.stateLabel.textColor = viewController.briefingColor[indexPath.item]
-                cell.temperatureColorView.color = viewController.briefingColor[indexPath.item]
-                cell.temperatureColorView.temperature = viewController.briefingValue[indexPath.item]
                 
+            } else if indexPath.section == 2 {
+                guard let weather = viewController.weather else { return UICollectionViewCell() }
+                
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BriefingCell", for: indexPath) as! BriefingCell
+                cell.configureData(with: weather)
+                cell.iconLabel.text = weather.briefingDatas[indexPath.item].icon
+                cell.titleLabel.text = weather.briefingDatas[indexPath.item].title
+                cell.stateLabel.text = weather.briefingDatas[indexPath.item].state
+                cell.descriptionLabel.attributedText = weather.briefingDatas[indexPath.item].description.attributedStringWithLineSpacing(1)
+                cell.stateLabel.textColor = weather.briefingDatas[indexPath.item].color
                 return cell
+                
             } else if indexPath.section == 3 {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ComfortIndexCell", for: indexPath) as! ComfortIndexCell
-                cell.iconLabel.text = viewController.comfortIndexIcon[indexPath.item]
-                cell.stateLabel.text = viewController.comfortIndexState[indexPath.item]
-                cell.valueLabel.text = viewController.comfortIndexValue[indexPath.item]
-                cell.stateLabel.textColor = viewController.briefingColor[indexPath.item]
+                cell.iconLabel.text = viewController.weather?.comfortDatas[indexPath.item].icon
+                cell.stateLabel.text = viewController.weather?.comfortDatas[indexPath.item].state
+                cell.valueLabel.text = viewController.weather?.comfortDatas[indexPath.item].valueTitle
+                cell.stateLabel.textColor = viewController.weather?.comfortDatas[indexPath.item].color
                 
                 return cell
             }

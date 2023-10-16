@@ -51,44 +51,38 @@ final class CharacterCell: UICollectionViewCell {
     }
     
     let temperatureLabel = UILabel().then {
-        $0.text = "30°"
         $0.textColor = Color.temperatureLabel
         $0.font = Font.temperatureLabel
     }
     
     let highestTemperatureLabel = UILabel().then {
-        $0.text = "32°↗"
         $0.textColor = Color.highestTemperatureLabel
         $0.font = Font.highestTemperatureLabel
     }
     
     let lowestTemperatureLabel = UILabel().then {
-        $0.text = "22°↘"
         $0.textColor = Color.lowestTemperatureLabel
         $0.font = Font.lowestTemperatureLabel
     }
     
     let weatherLabel = UILabel().then {
-        $0.text = "구름 조금"
         $0.font = Font.weatherLabel
         $0.textColor = Color.weatherLabel
     }
     
     let locationLabel = UILabel().then {
-        $0.text = "서울특별시 성동구"
         $0.font = Font.locationLabel
         $0.textColor = Color.locationLabel
     }
     
     let lastUpdateDateLabel = UILabel().then {
-        $0.text = "마지막 업데이트 10시"
         $0.font = Font.lastUpdateDateLabel
         $0.textColor = Color.lastUpdateDateLabel
     }
     
     let advicePositionView = AdvicePositionView(frame: CGRectZero)
     
-    let weatherImageView = UIImageView(image: UIImage(named: "MiniCloud"))
+    let weatherImageView = UIImageView()
     
     let characterImageView = UIImageView(image: UIImage(named: "Character"))
     

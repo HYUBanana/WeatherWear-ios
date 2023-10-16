@@ -9,6 +9,8 @@ import UIKit
 
 final class BriefingCell: UICollectionViewCell {
     
+    var weather: Weather? 
+    
     static let identifier = "BriefingCell"
     
     struct Metric {
@@ -112,6 +114,11 @@ final class BriefingCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configureData(with weather: Weather) {
+        self.weather = weather
+        self.temperatureColorView.configureData(with: weather)
     }
     
     private func setup() {

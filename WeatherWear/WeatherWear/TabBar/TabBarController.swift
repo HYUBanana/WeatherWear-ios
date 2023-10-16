@@ -8,6 +8,7 @@
 import UIKit
 
 class TabBarController: UITabBarController {
+    
     let provider: ServiceProviderType
     
     lazy var shadowView = UIView().then {
@@ -65,7 +66,7 @@ class TabBarController: UITabBarController {
     }
     
     private func addViewControllers() {
-        let homeViewController = HomeViewController()
+        let homeViewController = HomeViewController(provider: provider)
         configureTabBarItem(viewController: homeViewController, with: .home)
         
         let detailViewController = ViewController()
