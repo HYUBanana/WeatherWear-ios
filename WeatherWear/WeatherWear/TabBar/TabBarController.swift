@@ -65,7 +65,7 @@ class TabBarController: UITabBarController {
     }
     
     private func addViewControllers() {
-        let homeViewController = ViewController()
+        let homeViewController = HomeViewController()
         configureTabBarItem(viewController: homeViewController, with: .home)
         
         let detailViewController = ViewController()
