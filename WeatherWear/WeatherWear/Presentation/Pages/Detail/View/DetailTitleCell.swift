@@ -6,10 +6,14 @@
 //
 
 import UIKit
+import RxSwift
 
 class DetailTitleCell: UICollectionViewCell {
     
     static let identifier = "DetailTitleCell"
+    
+    private let viewModel: DetailTitleCellViewModel = DetailTitleCellViewModel()
+    var disposeBag = DisposeBag()
     
     struct Metric {
         static let spacing1: CGFloat = 30
@@ -60,15 +64,25 @@ class DetailTitleCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func bind() {
+        let input = DetailTitleCellViewModel.Input(cellInitialized: Observable.just(()))
+        let output = viewModel.transform(input)
+        
+        output.date
+            .drive(dateLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.mainText
+            .drive(mainLabel.rx.text)
+            .disposed(by: disposeBag)
+    }
+    
     static func fittingSize(availableWidth: CGFloat) -> CGSize {
         let cell = DetailTitleCell()
-        cell.configure()
+        cell.bind()
         
         let targetSize = CGSize(width: availableWidth, height: UIView.layoutFittingCompressedSize.height)
         return cell.contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
-    }
-    
-    func configure() {
     }
     
     private func setup() {

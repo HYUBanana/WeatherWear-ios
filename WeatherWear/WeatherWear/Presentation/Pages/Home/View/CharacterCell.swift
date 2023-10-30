@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RxSwift
 
 protocol CharacterCellDelegate: AnyObject {
     func downloadButtonTapped()
@@ -18,6 +19,9 @@ final class CharacterCell: UICollectionViewCell {
     weak var delegate: CharacterCellDelegate?
     
     var isVisible: Bool = true
+    
+    private let viewModel: CharacterCellViewModel = CharacterCellViewModel()
+    var disposeBag = DisposeBag()
     
     struct Metric {
         static let cornerRadius: CGFloat = 20
@@ -158,33 +162,68 @@ final class CharacterCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    static func fittingSize(availableWidth: CGFloat, weather: Weather) -> CGSize {
+    func bind() {
+        let input = CharacterCellViewModel.Input(cellInitialized: Observable.just(()))
+        let output = viewModel.transform(input)
+        
+        output.temperature
+            .drive(temperatureLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.highestTemperature
+            .drive(highestTemperatureLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.lowestTemperature
+            .drive(lowestTemperatureLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.weatherCondition
+            .drive(weatherLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.weatherConditionImage
+            .drive(weatherImageView.rx.image)
+            .disposed(by: disposeBag)
+        
+        output.location
+            .drive(locationLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.lastUpdateDate
+            .drive(lastUpdateDateLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.faceAdvice.drive(advicePositionView.faceAdvice.titleAdviceLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.faceDescription
+            .drive(advicePositionView.faceAdvice.subAdviceLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.clothesAdvice
+            .drive(advicePositionView.clothesAdvice.titleAdviceLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.clothesDescription
+            .drive(advicePositionView.clothesAdvice.subAdviceLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.itemAdvice
+            .drive(advicePositionView.itemAdvice.titleAdviceLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.itemDescription
+            .drive(advicePositionView.itemAdvice.subAdviceLabel.rx.text)
+            .disposed(by: disposeBag)
+    }
+    
+    static func fittingSize(availableWidth: CGFloat) -> CGSize {
         let cell = CharacterCell()
-        cell.configure(weather: weather)
+        cell.bind()
         
         let targetSize = CGSize(width: availableWidth, height: UIView.layoutFittingCompressedSize.height)
         return cell.contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
-    }
-    
-    func configure(weather: Weather) {
-        temperatureLabel.text = weather.temperatureString
-        highestTemperatureLabel.text = weather.highestTemperatureString
-        lowestTemperatureLabel.text = weather.lowestTemperatureString
-        
-        weatherLabel.text = weather.weatherConditionString
-        weatherImageView.image = weather.weatherConditionImage
-        
-        locationLabel.text = weather.location
-        lastUpdateDateLabel.text = weather.lastUpdatedDate
-        
-        advicePositionView.faceAdvice.titleAdviceLabel.text = weather.faceAdvice.title
-        advicePositionView.faceAdvice.subAdviceLabel.text = weather.faceAdvice.description
-        
-        advicePositionView.clothesAdvice.titleAdviceLabel.text = weather.clothesAdvice.title
-        advicePositionView.clothesAdvice.subAdviceLabel.text = weather.clothesAdvice.description
-        
-        advicePositionView.itemAdvice.titleAdviceLabel.text = weather.itemAdvice.title
-        advicePositionView.itemAdvice.subAdviceLabel.text = weather.itemAdvice.description
     }
     
     private func setup() {

@@ -6,10 +6,14 @@
 //
 
 import UIKit
+import RxSwift
 
 final class BriefingCell: UICollectionViewCell {
     
     static let identifier = "BriefingCell"
+    
+    private let viewModel: BriefingCellViewModel = BriefingCellViewModel()
+    var disposeBag = DisposeBag()
     
     struct Metric {
         static let cellPadding: CGFloat = 15
@@ -114,22 +118,37 @@ final class BriefingCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    static func fittingSize(availableWidth: CGFloat, briefingData: BriefingData) -> CGSize {
+    func bind() {
+        let input = BriefingCellViewModel.Input(cellInitialized: Observable.just(()))
+        let output = viewModel.transform(input)
+        
+        output.icon
+            .drive(iconLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.title
+            .drive(titleLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.state
+            .drive(stateLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.color
+            .drive(stateLabel.rx.textColor)
+            .disposed(by: disposeBag)
+        
+        output.description
+            .drive(descriptionLabel.rx.text)
+            .disposed(by: disposeBag)
+    }
+    
+    static func fittingSize(availableWidth: CGFloat) -> CGSize {
         let cell = BriefingCell()
-        cell.configure(briefingData: briefingData)
+        cell.bind()
         
         let targetSize = CGSize(width: availableWidth, height: UIView.layoutFittingCompressedSize.height)
         return cell.contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
-    }
-    
-    func configure(briefingData: BriefingData) {
-        iconLabel.text = briefingData.icon
-        titleLabel.text = briefingData.title
-        stateLabel.text = briefingData.state
-        stateLabel.textColor = briefingData.color
-        descriptionLabel.attributedText = briefingData.description.attributedStringWithLineSpacing(1)
-        
-        self.temperatureColorView.configure(briefingData: briefingData)
     }
     
     private func setup() {
@@ -144,15 +163,15 @@ final class BriefingCell: UICollectionViewCell {
     }
     
     private func setupConstraints() {
-        redirectionArrowImageView.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().offset(-Metric.cellPadding)
-            make.centerY.equalToSuperview()
-        }
-        
         briefingBlockStackView.snp.makeConstraints { make in
             make.left.top.equalToSuperview().offset(Metric.cellPadding)
             make.bottom.equalToSuperview().offset(-Metric.cellPadding)
-            make.right.equalTo(redirectionArrowImageView.snp.left).offset(-Metric.redirectionArrowPadding)
+        }
+        
+        redirectionArrowImageView.snp.makeConstraints { make in
+//            make.left.equalTo(briefingBlockStackView.snp.right).offset(Metric.redirectionArrowPadding)
+            make.right.equalToSuperview().offset(-Metric.cellPadding)
+            make.centerY.equalToSuperview()
         }
         
         temperatureColorView.snp.makeConstraints { make in

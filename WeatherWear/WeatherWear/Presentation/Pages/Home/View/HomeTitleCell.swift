@@ -6,10 +6,14 @@
 //
 
 import UIKit
+import RxSwift
 
 final class HomeTitleCell: UICollectionViewCell {
     
     static let identifier = "HomeTitleCell"
+    
+    private let viewModel: HomeTitleCellViewModel = HomeTitleCellViewModel()
+    var disposeBag = DisposeBag()
     
     struct Metric {
         static let spacing1: CGFloat = 30
@@ -71,18 +75,30 @@ final class HomeTitleCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    static func fittingSize(availableWidth: CGFloat, weather: Weather) -> CGSize {
+    func bind() {
+        let input = HomeTitleCellViewModel.Input(cellInitialized: Observable.just(()))
+        let output = viewModel.transform(input)
+        
+        output.date
+            .drive(dateLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.mainText
+            .drive(mainLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.description
+            .drive(descriptionLabel.rx.text)
+            .disposed(by: disposeBag)
+    }
+    
+    static func fittingSize(availableWidth: CGFloat) -> CGSize {
         let cell = HomeTitleCell()
-        cell.configure(weather: weather)
+        
+        cell.bind()
         
         let targetSize = CGSize(width: availableWidth, height: UIView.layoutFittingCompressedSize.height)
         return cell.contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
-    }
-    
-    func configure(weather: Weather) {
-        dateLabel.text = weather.dateTitle
-        mainLabel.text = weather.title
-        descriptionLabel.attributedText = weather.description.attributedStringWithLineSpacing(5)
     }
     
     private func setup() {

@@ -6,10 +6,14 @@
 //
 
 import UIKit
+import RxSwift
 
 final class ComfortIndexCell: UICollectionViewCell {
     
     static let identifier = "ComfortIndexCell"
+    
+    private let viewModel: ComfortIndexCellViewModel = ComfortIndexCellViewModel()
+    var disposeBag = DisposeBag()
     
     struct Metric {
         static let cellPadding: CGFloat = 20
@@ -72,19 +76,33 @@ final class ComfortIndexCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    static func fittingSize(availableWidth: CGFloat, comfortData: ComfortIndexData) -> CGSize {
+    func bind() {
+        let input = ComfortIndexCellViewModel.Input(cellInitialized: Observable.just(()))
+        let output = viewModel.transform(input)
+        
+        output.icon
+            .drive(iconLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.title
+            .drive(stateLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.value
+            .drive(valueLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.color
+            .drive(stateLabel.rx.textColor)
+            .disposed(by: disposeBag)
+    }
+    
+    static func fittingSize(availableWidth: CGFloat) -> CGSize {
         let cell = ComfortIndexCell()
-        cell.configure(comfortData: comfortData)
+        cell.bind()
         
         let targetSize = CGSize(width: availableWidth, height: UIView.layoutFittingCompressedSize.height)
         return cell.contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
-    }
-    
-    func configure(comfortData: ComfortIndexData) {
-        iconLabel.text = comfortData.icon
-        stateLabel.text = comfortData.state
-        valueLabel.text = comfortData.valueTitle
-        stateLabel.textColor = comfortData.color
     }
     
     private func setup() {

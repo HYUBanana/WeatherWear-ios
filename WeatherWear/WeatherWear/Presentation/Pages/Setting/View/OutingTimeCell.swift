@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Then
+import RxSwift
 
 protocol OutingTimeCellDelegate: AnyObject {
     func outingTimeViewTapped(cell: OutingTimeCell)
@@ -14,6 +14,11 @@ protocol OutingTimeCellDelegate: AnyObject {
 }
 
 final class OutingTimeCell: UICollectionViewCell {
+    
+    static let identifier = "OutingTimeCell"
+    
+    private let viewModel: OutingTimeCellViewModel = OutingTimeCellViewModel()
+    var disposeBag = DisposeBag()
     
     weak var delegate: OutingTimeCellDelegate?
     
@@ -70,6 +75,31 @@ final class OutingTimeCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func bind() {
+        let input = OutingTimeCellViewModel.Input(cellInitialized: Observable.just(()))
+        let output = viewModel.transform(input)
+        
+        output.departureTime
+            .drive(departureTimeLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.arrivalTime
+            .drive(arrivalTimeLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.totalTime
+            .drive(totalTimeLabel.rx.text)
+            .disposed(by: disposeBag)
+    }
+    
+    static func fittingSize(availableWidth: CGFloat) -> CGSize {
+        let cell = OutingTimeCell()
+        cell.bind()
+        
+        let targetSize = CGSize(width: availableWidth, height: UIView.layoutFittingCompressedSize.height)
+        return cell.contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
     }
     
     private func setup() {

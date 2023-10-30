@@ -10,7 +10,7 @@ protocol ServiceProviderType: AnyObject {
     var outingTimeService: OutingTimeServiceType { get }
     var degreeSettingService: DegreeOptionServiceType { get }
     var autoSettingService: AutoOptionServiceType { get }
-    var weatherService: WeatherServiceType { get }
+    var weatherService: WeatherService { get }
 }
 
 final class ServiceProvider: ServiceProviderType {
@@ -18,7 +18,7 @@ final class ServiceProvider: ServiceProviderType {
     var outingTimeService: OutingTimeServiceType = OutingTimeService()
     var degreeSettingService: DegreeOptionServiceType = DegreeOptionService()
     var autoSettingService: AutoOptionServiceType = AutoOptionService()
-    var weatherService: WeatherServiceType = WeatherService()
+    var weatherService: WeatherService = WeatherService()
 }
 
 final class MockServiceProvider: ServiceProviderType {
@@ -26,5 +26,6 @@ final class MockServiceProvider: ServiceProviderType {
     var outingTimeService: OutingTimeServiceType = MockOutingTimeService()
     var degreeSettingService: DegreeOptionServiceType = MockDegreeOptionService()
     var autoSettingService: AutoOptionServiceType = MockAutoOptionService()
-    var weatherService: WeatherServiceType = MockWeatherService()
+    //var weatherService: WeatherServiceType = MockWeatherService()
+    var weatherService: WeatherService = WeatherService()
 }

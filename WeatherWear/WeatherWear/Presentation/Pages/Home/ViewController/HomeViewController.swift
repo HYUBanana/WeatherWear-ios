@@ -6,16 +6,14 @@
 //
 
 import UIKit
+import RxSwift
 
 class HomeViewController: BaseViewController<HomeView> {
     
-    let provider: ServiceProviderType
+    //let viewModels: [any ViewModelType] = [HomeTitleCellViewModel(provider: WeatherService())]
+    var disposeBag = DisposeBag()
     
-    var weather: Weather? {
-        didSet {
-            contentView.collectionView.reloadData()
-        }
-    }
+    let provider: ServiceProviderType
     
     let sections = ["메인 텍스트", "캐릭터", "오늘의 브리핑", "생활 지수"]
     
@@ -32,7 +30,6 @@ class HomeViewController: BaseViewController<HomeView> {
         super.viewDidLoad()
         
         registerCells()
-        loadData()
         setup()
     }
     
@@ -42,12 +39,6 @@ class HomeViewController: BaseViewController<HomeView> {
         self.contentView.collectionView.register(BriefingCell.self, forCellWithReuseIdentifier: BriefingCell.identifier)
         self.contentView.collectionView.register(ComfortIndexCell.self, forCellWithReuseIdentifier: ComfortIndexCell.identifier)
         self.contentView.collectionView.register(HomeHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HomeHeaderView.identifier)
-    }
-    
-    private func loadData() {
-        provider.weatherService.getWeather { [weak self] weather in
-            self?.weather = weather
-        }
     }
     
     private func setup() {
@@ -76,11 +67,10 @@ extension HomeViewController: CharacterCellDelegate {
 extension HomeViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return sections.count
+        return 4
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let weather = weather else { return 0 }
         
         switch section {
         case 0:
@@ -88,36 +78,35 @@ extension HomeViewController: UICollectionViewDataSource {
         case 1:
             return 1
         case 2:
-            return weather.briefingDatas.count
+            return 4
         case 3:
-            return weather.comfortDatas.count
+            return 4
         default:
             return 0
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let weather = weather else { return UICollectionViewCell() }
         switch indexPath.section {
         case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeTitleCell.identifier, for: indexPath) as! HomeTitleCell
-            cell.configure(weather: weather)
+            cell.bind()
             return cell
             
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterCell.identifier, for: indexPath) as! CharacterCell
-            cell.configure(weather: weather)
+            cell.bind()
             cell.delegate = self
             return cell
             
         case 2:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BriefingCell.identifier, for: indexPath) as! BriefingCell
-            cell.configure(briefingData: weather.briefingDatas[indexPath.item])
+            cell.bind()
             return cell
             
         case 3:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ComfortIndexCell.identifier, for: indexPath) as! ComfortIndexCell
-            cell.configure(comfortData: weather.comfortDatas[indexPath.item])
+            cell.bind()
             return cell
             
         default:
@@ -140,19 +129,18 @@ extension HomeViewController: UICollectionViewDataSource {
 
 extension HomeViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard let weather = weather else { return CGSizeZero }
         switch indexPath.section {
         case 0:
-            return HomeTitleCell.fittingSize(availableWidth: collectionView.bounds.width, weather: weather)
+            return HomeTitleCell.fittingSize(availableWidth: collectionView.bounds.width)
             
         case 1:
-            return CharacterCell.fittingSize(availableWidth: collectionView.bounds.width, weather: weather)
+            return CharacterCell.fittingSize(availableWidth: collectionView.bounds.width)
             
         case 2:
-            return BriefingCell.fittingSize(availableWidth: collectionView.bounds.width, briefingData: weather.briefingDatas[indexPath.item])
+            return BriefingCell.fittingSize(availableWidth: collectionView.bounds.width)
             
         case 3:
-            return ComfortIndexCell.fittingSize(availableWidth: (collectionView.bounds.width - 13)/2.0, comfortData: weather.comfortDatas[indexPath.item])
+            return ComfortIndexCell.fittingSize(availableWidth: (collectionView.bounds.width - 13)/2.0)
             
         default:
             return CGSize.zero
