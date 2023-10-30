@@ -10,6 +10,12 @@
 		D925C26D2ACDF18200075D5D /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D925C26C2ACDF18200075D5D /* UIColor.swift */; };
 		D925C27C2ACF0C3200075D5D /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D925C27B2ACF0C3200075D5D /* UIImage.swift */; };
 		D925C2892ACF2B8500075D5D /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D925C2882ACF2B8500075D5D /* String.swift */; };
+		D9345A642AE62F1F004B42C8 /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9345A612AE62F1F004B42C8 /* CircleView.swift */; };
+		D9345A6F2AE659AB004B42C8 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9345A692AE659AB004B42C8 /* DetailView.swift */; };
+		D9345A702AE659AB004B42C8 /* ApparentTemperatureGraphCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9345A6A2AE659AB004B42C8 /* ApparentTemperatureGraphCell.swift */; };
+		D9345A712AE659AB004B42C8 /* TitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9345A6B2AE659AB004B42C8 /* TitleCell.swift */; };
+		D9345A722AE659AB004B42C8 /* TemperatureGraphCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9345A6C2AE659AB004B42C8 /* TemperatureGraphCell.swift */; };
+		D9345A732AE659AB004B42C8 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9345A6E2AE659AB004B42C8 /* DetailViewController.swift */; };
 		D965EEA42ADD1E0200426096 /* TabBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EE872ADD1E0200426096 /* TabBarItem.swift */; };
 		D965EEA52ADD1E0200426096 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EE882ADD1E0200426096 /* TabBarController.swift */; };
 		D965EEA62ADD1E0200426096 /* TemperatureBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EE8D2ADD1E0200426096 /* TemperatureBar.swift */; };
@@ -81,6 +87,12 @@
 		D925C26C2ACDF18200075D5D /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		D925C27B2ACF0C3200075D5D /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		D925C2882ACF2B8500075D5D /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		D9345A612AE62F1F004B42C8 /* CircleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleView.swift; sourceTree = "<group>"; };
+		D9345A692AE659AB004B42C8 /* DetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
+		D9345A6A2AE659AB004B42C8 /* ApparentTemperatureGraphCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApparentTemperatureGraphCell.swift; sourceTree = "<group>"; };
+		D9345A6B2AE659AB004B42C8 /* TitleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleCell.swift; sourceTree = "<group>"; };
+		D9345A6C2AE659AB004B42C8 /* TemperatureGraphCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemperatureGraphCell.swift; sourceTree = "<group>"; };
+		D9345A6E2AE659AB004B42C8 /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		D965EE872ADD1E0200426096 /* TabBarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarItem.swift; sourceTree = "<group>"; };
 		D965EE882ADD1E0200426096 /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		D965EE8D2ADD1E0200426096 /* TemperatureBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemperatureBar.swift; sourceTree = "<group>"; };
@@ -170,6 +182,34 @@
 			path = Util;
 			sourceTree = "<group>";
 		};
+		D9345A672AE659AB004B42C8 /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				D9345A682AE659AB004B42C8 /* View */,
+				D9345A6D2AE659AB004B42C8 /* ViewController */,
+			);
+			path = Detail;
+			sourceTree = "<group>";
+		};
+		D9345A682AE659AB004B42C8 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				D9345A692AE659AB004B42C8 /* DetailView.swift */,
+				D9345A6A2AE659AB004B42C8 /* ApparentTemperatureGraphCell.swift */,
+				D9345A6B2AE659AB004B42C8 /* TitleCell.swift */,
+				D9345A6C2AE659AB004B42C8 /* TemperatureGraphCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		D9345A6D2AE659AB004B42C8 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D9345A6E2AE659AB004B42C8 /* DetailViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
 		D965EE852ADD1E0200426096 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
@@ -192,6 +232,7 @@
 		D965EE892ADD1E0200426096 /* Component */ = {
 			isa = PBXGroup;
 			children = (
+				D9345A612AE62F1F004B42C8 /* CircleView.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -199,6 +240,7 @@
 		D965EE8A2ADD1E0200426096 /* Pages */ = {
 			isa = PBXGroup;
 			children = (
+				D9345A672AE659AB004B42C8 /* Detail */,
 				D965EE8B2ADD1E0200426096 /* Home */,
 				D965EE9A2ADD1E0200426096 /* Setting */,
 			);
@@ -270,21 +312,6 @@
 			path = ViewController;
 			sourceTree = "<group>";
 		};
-		D965EEB92ADD1E0900426096 /* DataSource */ = {
-			isa = PBXGroup;
-			children = (
-				D965EEBA2ADD1E0900426096 /* API */,
-			);
-			path = DataSource;
-			sourceTree = "<group>";
-		};
-		D965EEBA2ADD1E0900426096 /* API */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = API;
-			sourceTree = "<group>";
-		};
 		D965EEBB2ADD1E0F00426096 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
@@ -344,7 +371,6 @@
 			isa = PBXGroup;
 			children = (
 				D965EEBB2ADD1E0F00426096 /* Domain */,
-				D965EEB92ADD1E0900426096 /* DataSource */,
 				D965EE852ADD1E0200426096 /* Presentation */,
 				D925C26B2ACDF17400075D5D /* Util */,
 				D9FA08752AB5A63B005EC223 /* AppDelegate.swift */,
@@ -519,10 +545,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9345A702AE659AB004B42C8 /* ApparentTemperatureGraphCell.swift in Sources */,
 				D965EEAF2ADD1E0200426096 /* BriefingCell.swift in Sources */,
 				D965EEB32ADD1E0200426096 /* OptionCollectionView.swift in Sources */,
 				D965EEAB2ADD1E0200426096 /* AdvicePositionView.swift in Sources */,
+				D9345A642AE62F1F004B42C8 /* CircleView.swift in Sources */,
 				D925C27C2ACF0C3200075D5D /* UIImage.swift in Sources */,
+				D9345A6F2AE659AB004B42C8 /* DetailView.swift in Sources */,
 				D965EED22ADD1E0F00426096 /* ServiceProvider.swift in Sources */,
 				D965EECB2ADD1E0F00426096 /* WeatherCondition.swift in Sources */,
 				D965EEB62ADD1E0200426096 /* OutingTimeCell.swift in Sources */,
@@ -532,6 +561,7 @@
 				D925C26D2ACDF18200075D5D /* UIColor.swift in Sources */,
 				D9FA087A2AB5A63B005EC223 /* ViewController.swift in Sources */,
 				D965EED02ADD1E0F00426096 /* UserLocationService.swift in Sources */,
+				D9345A712AE659AB004B42C8 /* TitleCell.swift in Sources */,
 				D965EEA82ADD1E0200426096 /* MainTextCell.swift in Sources */,
 				D965EEA52ADD1E0200426096 /* TabBarController.swift in Sources */,
 				D965EECC2ADD1E0F00426096 /* ComfortIndexData.swift in Sources */,
@@ -545,12 +575,14 @@
 				D9FA08762AB5A63B005EC223 /* AppDelegate.swift in Sources */,
 				D965EED32ADD1E0F00426096 /* OutingTimeService.swift in Sources */,
 				D965EEB82ADD1E0200426096 /* SettingViewController.swift in Sources */,
+				D9345A722AE659AB004B42C8 /* TemperatureGraphCell.swift in Sources */,
 				D965EEAE2ADD1E0200426096 /* HomeHeaderView.swift in Sources */,
 				D965EEA92ADD1E0200426096 /* CharacterCell.swift in Sources */,
 				D965EECF2ADD1E0F00426096 /* BriefingData.swift in Sources */,
 				D965EECE2ADD1E0F00426096 /* Weather.swift in Sources */,
 				D965EED12ADD1E0F00426096 /* WeatherService.swift in Sources */,
 				D965EED42ADD1E0F00426096 /* DegreeOptionService.swift in Sources */,
+				D9345A732AE659AB004B42C8 /* DetailViewController.swift in Sources */,
 				D965EEB72ADD1E0200426096 /* SettingView.swift in Sources */,
 				D9FA08782AB5A63B005EC223 /* SceneDelegate.swift in Sources */,
 				D965EECA2ADD1E0F00426096 /* UserLocation.swift in Sources */,
