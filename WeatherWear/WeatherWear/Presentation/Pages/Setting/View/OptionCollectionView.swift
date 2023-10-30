@@ -51,8 +51,8 @@ final class OptionCell: UICollectionViewCell {
     }
     
     private func addSubviews() {
-        addSubview(degreeTitle)
-        addSubview(segmentControl)
+        contentView.addSubview(degreeTitle)
+        contentView.addSubview(segmentControl)
     }
     
     private func setupConstraints() {
@@ -64,6 +64,33 @@ final class OptionCell: UICollectionViewCell {
         segmentControl.snp.makeConstraints { make in
             make.top.right.bottom.equalToSuperview()
             make.width.equalTo(150)
+        }
+    }
+}
+
+extension OptionCell {
+    final class SettingSegmentedControl: UISegmentedControl {
+        
+        struct Color {
+            static let blueColor = UIColor(red: 36, green: 160, blue: 237)
+        }
+        
+        override init(items: [Any]?) {
+            super.init(items: items)
+            setup()
+        }
+        
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        private func setup() {
+            self.setDividerImage(UIImage(), forLeftSegmentState: .selected, rightSegmentState: .normal, barMetrics: .default)
+            
+            self.selectedSegmentTintColor = Color.blueColor
+            
+            let selectedTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+            self.setTitleTextAttributes(selectedTextAttributes, for: .selected)
         }
     }
 }
@@ -109,7 +136,7 @@ final class OptionCollectionView: UICollectionViewCell {
     }
     
     private func addSubviews() {
-        addSubview(collectionView)
+        contentView.addSubview(collectionView)
     }
     
     private func setupConstraints() {

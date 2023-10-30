@@ -1,15 +1,15 @@
 //
-//  HomeHeader.swift
+//  DetailHeaderView.swift
 //  WeatherWear
 //
-//  Created by 디해 on 2023/10/11.
+//  Created by 디해 on 2023/10/22.
 //
 
 import UIKit
 
-final class HomeHeaderView: UICollectionReusableView {
+final class DetailHeaderView: UICollectionReusableView {
     
-    static let identifier = "HomeHeaderView"
+    static let identifier = "DetailHeaderView"
     
     struct Metric {
         static let leftPadding: CGFloat = 10
@@ -40,16 +40,16 @@ final class HomeHeaderView: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    static func fittingSize(availableWidth: CGFloat, headerText: String) -> CGSize {
-        let cell = HomeHeaderView()
-        cell.configure(headerText: headerText)
+    static func fittingSize(availableWidth: CGFloat) -> CGSize {
+        let cell = DetailHeaderView()
+        cell.configure()
         
         let targetSize = CGSize(width: availableWidth, height: UIView.layoutFittingCompressedSize.height)
         return cell.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
     }
     
-    func configure(headerText: String) {
-        titleLabel.text = headerText
+    func configure() {
+        titleLabel.text = "온도와 강수량"
     }
     
     private func addSubviews() {

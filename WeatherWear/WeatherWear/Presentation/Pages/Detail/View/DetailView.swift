@@ -9,11 +9,12 @@ import UIKit
 
 final class DetailView: UIView {
     struct Metric {
-        static let collectionViewTopPadding: CGFloat = 0
         static let collectionViewHorizontalPadding: CGFloat = 20
         static let collectionViewBottomPadding: CGFloat = 0
         
-        static let cellVerticalSpacing: CGFloat = 30
+        static let collectionViewSectionTopPadding: CGFloat = 0
+        static let collectionViewSectionHorizontalPadding: CGFloat = 0
+        static let collectionViewSectionBottomPadding: CGFloat = 35
     }
     
     struct Color {
@@ -24,7 +25,9 @@ final class DetailView: UIView {
         
     }
     
-    let layout = UICollectionViewFlowLayout()
+    let layout = UICollectionViewFlowLayout().then {
+        $0.sectionInset = UIEdgeInsets(top: Metric.collectionViewSectionTopPadding, left: Metric.collectionViewSectionHorizontalPadding, bottom: Metric.collectionViewSectionBottomPadding, right: Metric.collectionViewSectionHorizontalPadding)
+    }
     
     lazy var collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: layout).then {
         $0.backgroundColor = .clear
@@ -53,7 +56,7 @@ final class DetailView: UIView {
     
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(self.safeAreaLayoutGuide.snp.top).offset(Metric.collectionViewTopPadding)
+            make.top.equalTo(self.safeAreaLayoutGuide.snp.top)
             make.left.equalToSuperview().offset(Metric.collectionViewHorizontalPadding)
             make.right.equalToSuperview().offset(-Metric.collectionViewHorizontalPadding)
             make.bottom.equalToSuperview().offset(-Metric.collectionViewBottomPadding)

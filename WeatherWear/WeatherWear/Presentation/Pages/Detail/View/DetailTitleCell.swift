@@ -7,13 +7,15 @@
 
 import UIKit
 
-class TitleCell: UICollectionViewCell {
+class DetailTitleCell: UICollectionViewCell {
     
-    static let identifier = "TitleCell"
+    static let identifier = "DetailTitleCell"
     
     struct Metric {
-        static let leadingPadding: CGFloat = 5
-        static let textSpacing: CGFloat = 8
+        static let spacing1: CGFloat = 30
+        static let spacing2: CGFloat = 5
+        
+        static let leftPadding: CGFloat = 5
     }
     
     struct Color {
@@ -26,13 +28,17 @@ class TitleCell: UICollectionViewCell {
         static let mainLabel = UIFont.systemFont(ofSize: 36, weight: .black)
     }
     
+    let spacing1 = UIView().then {
+        $0.backgroundColor = .clear
+    }
+    
     let dateLabel = UILabel().then {
         $0.text = "7월 24일 월요일,"
         $0.font = Font.dateLabel
         $0.textColor = Color.dateLabel
     }
     
-    let spacingView = UIView().then {
+    let spacing2 = UIView().then {
         $0.backgroundColor = .clear
     }
     
@@ -54,35 +60,52 @@ class TitleCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    static func fittingSize(availableWidth: CGFloat) -> CGSize {
+        let cell = DetailTitleCell()
+        cell.configure()
+        
+        let targetSize = CGSize(width: availableWidth, height: UIView.layoutFittingCompressedSize.height)
+        return cell.contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+    }
+    
+    func configure() {
+    }
+    
     private func setup() {
         self.backgroundColor = .clear
     }
     
     private func addSubviews() {
-        addSubview(dateLabel)
-        addSubview(spacingView)
-        addSubview(mainLabel)
+        contentView.addSubview(spacing1)
+        contentView.addSubview(dateLabel)
+        contentView.addSubview(spacing2)
+        contentView.addSubview(mainLabel)
     }
     
     private func setupConstraints() {
         
+        spacing1.snp.makeConstraints { make in
+            make.top.left.right.equalToSuperview()
+            make.height.equalTo(Metric.spacing1)
+        }
+        
         dateLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.left.equalToSuperview().offset(Metric.leadingPadding)
+            make.top.equalTo(spacing1.snp.bottom)
+            make.left.equalToSuperview().offset(Metric.leftPadding)
             make.right.equalToSuperview()
         }
         
-        spacingView.snp.makeConstraints { make in
+        spacing2.snp.makeConstraints { make in
             make.top.equalTo(dateLabel.snp.bottom)
-            make.left.equalToSuperview().offset(Metric.leadingPadding)
+            make.left.equalToSuperview()
             make.right.equalToSuperview()
-            make.height.equalTo(Metric.textSpacing)
+            make.height.equalTo(Metric.spacing2)
         }
         
         mainLabel.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(Metric.leadingPadding)
+            make.left.equalToSuperview().offset(Metric.leftPadding)
             make.right.equalToSuperview()
-            make.top.equalTo(spacingView.snp.bottom)
+            make.top.equalTo(spacing2.snp.bottom)
             make.bottom.equalToSuperview()
         }
     }

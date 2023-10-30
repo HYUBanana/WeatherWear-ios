@@ -10,14 +10,12 @@ import UIKit
 final class HomeView: UIView {
     struct Metric {
         static let mainWeatherImageViewTopPadding: CGFloat = 5
-        
-        static let collectionViewTopPadding: CGFloat = 30
         static let collectionViewHorizontalPadding: CGFloat = 20
         static let collectionViewBottomPadding: CGFloat = 0
         
-        static let collectionViewHeaderTopPadding: CGFloat = 5
-        static let collectionViewHeaderHorizontalPadding: CGFloat = 0
-        static let collectionViewHeaderBottomPadding: CGFloat = 35
+        static let collectionViewSectionTopPadding: CGFloat = 0
+        static let collectionViewSectionHorizontalPadding: CGFloat = 0
+        static let collectionViewSectionBottomPadding: CGFloat = 35
         
         static let cellVerticalPadding: CGFloat = 12
         static let cellHorizontalPadding: CGFloat = 12
@@ -32,12 +30,10 @@ final class HomeView: UIView {
     }
     
     let layout = UICollectionViewFlowLayout().then {
-        $0.sectionInset = UIEdgeInsets(top: Metric.collectionViewHeaderTopPadding, left: Metric.collectionViewHeaderHorizontalPadding, bottom: Metric.collectionViewHeaderBottomPadding, right: Metric.collectionViewHeaderHorizontalPadding)
+        $0.sectionInset = UIEdgeInsets(top: Metric.collectionViewSectionTopPadding, left: Metric.collectionViewSectionHorizontalPadding, bottom: Metric.collectionViewSectionBottomPadding, right: Metric.collectionViewSectionHorizontalPadding)
         
         $0.minimumLineSpacing = Metric.cellVerticalPadding
         $0.minimumInteritemSpacing = Metric.cellHorizontalPadding
-        
-//        $0.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
     }
     
     lazy var collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout).then {
@@ -71,7 +67,7 @@ final class HomeView: UIView {
     
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(self.safeAreaLayoutGuide.snp.top).offset(Metric.collectionViewTopPadding)
+            make.top.equalTo(self.safeAreaLayoutGuide.snp.top)
             make.left.equalToSuperview().offset(Metric.collectionViewHorizontalPadding)
             make.right.equalToSuperview().offset(-Metric.collectionViewHorizontalPadding)
             make.bottom.equalToSuperview().offset(-Metric.collectionViewBottomPadding)

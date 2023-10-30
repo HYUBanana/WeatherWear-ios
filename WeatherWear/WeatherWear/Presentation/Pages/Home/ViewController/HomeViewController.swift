@@ -11,12 +11,13 @@ class HomeViewController: BaseViewController<HomeView> {
     
     let provider: ServiceProviderType
     
-    var weather: Weather?
+    var weather: Weather? {
+        didSet {
+            contentView.collectionView.reloadData()
+        }
+    }
     
     let sections = ["메인 텍스트", "캐릭터", "오늘의 브리핑", "생활 지수"]
-    
-    lazy var homeViewDataSource: HomeViewDataSource = HomeViewDataSource(viewController: self)
-    lazy var homeViewDelegate: HomeViewDelegateFlowLayout = HomeViewDelegateFlowLayout()
     
     init(provider: ServiceProviderType) {
         self.provider = provider
@@ -36,7 +37,7 @@ class HomeViewController: BaseViewController<HomeView> {
     }
     
     private func registerCells() {
-        self.contentView.collectionView.register(MainTextCell.self, forCellWithReuseIdentifier: MainTextCell.identifier)
+        self.contentView.collectionView.register(HomeTitleCell.self, forCellWithReuseIdentifier: HomeTitleCell.identifier)
         self.contentView.collectionView.register(CharacterCell.self, forCellWithReuseIdentifier: CharacterCell.identifier)
         self.contentView.collectionView.register(BriefingCell.self, forCellWithReuseIdentifier: BriefingCell.identifier)
         self.contentView.collectionView.register(ComfortIndexCell.self, forCellWithReuseIdentifier: ComfortIndexCell.identifier)
@@ -46,14 +47,12 @@ class HomeViewController: BaseViewController<HomeView> {
     private func loadData() {
         provider.weatherService.getWeather { [weak self] weather in
             self?.weather = weather
-            self?.contentView.collectionView.dataSource = self?.homeViewDataSource
-            self?.contentView.collectionView.delegate = self?.homeViewDelegate
-            self?.contentView.collectionView.reloadData()
         }
     }
     
     private func setup() {
-        
+        contentView.collectionView.dataSource = self
+        contentView.collectionView.delegate = self
     }
 }
 
@@ -74,138 +73,113 @@ extension HomeViewController: CharacterCellDelegate {
     }
 }
 
-extension HomeViewController {
-    final class HomeViewDataSource: NSObject, UICollectionViewDataSource {
+extension HomeViewController: UICollectionViewDataSource {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return sections.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        guard let weather = weather else { return 0 }
         
-        weak var viewController: HomeViewController?
-        
-        init(viewController: HomeViewController) {
-            self.viewController = viewController
-            super.init()
-        }
-        
-        func numberOfSections(in collectionView: UICollectionView) -> Int {
-            guard let viewController = viewController else { return 0 }
-            return viewController.sections.count
-        }
-        
-        func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-            guard let viewController = viewController else { return 0 }
-            if section == 0 {
-                return 1
-            }
-            else if section == 1 {
-                return 1
-            }
-            else if section == 2 {
-                return viewController.weather?.briefingDatas.count ?? 0
-            }
-            else if section == 3 {
-                return viewController.weather?.comfortDatas.count ?? 0
-            }
+        switch section {
+        case 0:
+            return 1
+        case 1:
+            return 1
+        case 2:
+            return weather.briefingDatas.count
+        case 3:
+            return weather.comfortDatas.count
+        default:
             return 0
-        }
-        
-        func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            guard let viewController = viewController else { return UICollectionViewCell() }
-            
-            if indexPath.section == 0 {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MainTextCell", for: indexPath) as! MainTextCell
-                cell.dateLabel.text = viewController.weather?.dateTitle
-                cell.mainLabel.text = viewController.weather?.title
-                cell.descriptionLabel.attributedText = viewController.weather?.description.attributedStringWithLineSpacing(5)
-                return cell
-            } else if indexPath.section == 1 {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CharacterCell", for: indexPath) as! CharacterCell
-                cell.temperatureLabel.text = viewController.weather?.temperatureString
-                cell.highestTemperatureLabel.text = viewController.weather?.highestTemperatureString
-                cell.lowestTemperatureLabel.text = viewController.weather?.lowestTemperatureString
-                
-                cell.weatherLabel.text = viewController.weather?.weatherConditionString
-                cell.weatherImageView.image = viewController.weather?.weatherConditionImage
-                
-                cell.locationLabel.text = viewController.weather?.location
-                cell.lastUpdateDateLabel.text = viewController.weather?.lastUpdatedDate
-                
-                cell.advicePositionView.faceAdvice.titleAdviceLabel.text = viewController.weather?.faceAdvice.title
-                cell.advicePositionView.faceAdvice.subAdviceLabel.text = viewController.weather?.faceAdvice.description
-                
-                cell.advicePositionView.clothesAdvice.titleAdviceLabel.text = viewController.weather?.clothesAdvice.title
-                cell.advicePositionView.clothesAdvice.subAdviceLabel.text = viewController.weather?.clothesAdvice.description
-                
-                cell.advicePositionView.itemAdvice.titleAdviceLabel.text = viewController.weather?.itemAdvice.title
-                cell.advicePositionView.itemAdvice.subAdviceLabel.text = viewController.weather?.itemAdvice.description
-                cell.delegate = viewController
-                return cell
-                
-            } else if indexPath.section == 2 {
-                guard let weather = viewController.weather else { return UICollectionViewCell() }
-                
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BriefingCell", for: indexPath) as! BriefingCell
-                cell.configureData(with: weather)
-                cell.iconLabel.text = weather.briefingDatas[indexPath.item].icon
-                cell.titleLabel.text = weather.briefingDatas[indexPath.item].title
-                cell.stateLabel.text = weather.briefingDatas[indexPath.item].state
-                cell.descriptionLabel.attributedText = weather.briefingDatas[indexPath.item].description.attributedStringWithLineSpacing(1)
-                cell.stateLabel.textColor = weather.briefingDatas[indexPath.item].color
-                return cell
-                
-            } else if indexPath.section == 3 {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ComfortIndexCell", for: indexPath) as! ComfortIndexCell
-                cell.iconLabel.text = viewController.weather?.comfortDatas[indexPath.item].icon
-                cell.stateLabel.text = viewController.weather?.comfortDatas[indexPath.item].state
-                cell.valueLabel.text = viewController.weather?.comfortDatas[indexPath.item].valueTitle
-                cell.stateLabel.textColor = viewController.weather?.comfortDatas[indexPath.item].color
-                
-                return cell
-            }
-            return UICollectionViewCell()
-        }
-        
-        func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-            if kind == UICollectionView.elementKindSectionHeader {
-                
-                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HomeHeaderView.identifier, for: indexPath) as! HomeHeaderView
-                headerView.titleLabel.text = viewController?.sections[indexPath.section]
-                return headerView
-                
-            }
-            return UICollectionReusableView()
         }
     }
     
-    final class HomeViewDelegateFlowLayout: NSObject, UICollectionViewDelegateFlowLayout {
-        func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-            if indexPath.section == 0 {
-                return CGSize(width: collectionView.bounds.width, height: 200)
-            }
-            else if indexPath.section == 1 {
-                return CGSize(width: collectionView.bounds.width, height: 450)
-            }
-            else if indexPath.section == 2 {
-                return CGSize(width: collectionView.bounds.width, height: 90)
-            }
-            else if indexPath.section == 3 {
-                
-                return CGSize(width: collectionView.bounds.width/2 - 6, height: 80)
-            }
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let weather = weather else { return UICollectionViewCell() }
+        switch indexPath.section {
+        case 0:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeTitleCell.identifier, for: indexPath) as! HomeTitleCell
+            cell.configure(weather: weather)
+            return cell
+            
+        case 1:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterCell.identifier, for: indexPath) as! CharacterCell
+            cell.configure(weather: weather)
+            cell.delegate = self
+            return cell
+            
+        case 2:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BriefingCell.identifier, for: indexPath) as! BriefingCell
+            cell.configure(briefingData: weather.briefingDatas[indexPath.item])
+            return cell
+            
+        case 3:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ComfortIndexCell.identifier, for: indexPath) as! ComfortIndexCell
+            cell.configure(comfortData: weather.comfortDatas[indexPath.item])
+            return cell
+            
+        default:
+            return UICollectionViewCell()
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HomeHeaderView.identifier, for: indexPath) as! HomeHeaderView
+            headerView.configure(headerText: sections[indexPath.section])
+            return headerView
+        
+        default:
+            return UICollectionReusableView()
+        }
+    }
+}
+
+extension HomeViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        guard let weather = weather else { return CGSizeZero }
+        switch indexPath.section {
+        case 0:
+            return HomeTitleCell.fittingSize(availableWidth: collectionView.bounds.width, weather: weather)
+            
+        case 1:
+            return CharacterCell.fittingSize(availableWidth: collectionView.bounds.width, weather: weather)
+            
+        case 2:
+            return BriefingCell.fittingSize(availableWidth: collectionView.bounds.width, briefingData: weather.briefingDatas[indexPath.item])
+            
+        case 3:
+            return ComfortIndexCell.fittingSize(availableWidth: (collectionView.bounds.width - 13)/2.0, comfortData: weather.comfortDatas[indexPath.item])
+            
+        default:
             return CGSize.zero
         }
-        
-        func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-            if (section == 2 || section == 3) {
-                return CGSize(width: collectionView.bounds.width, height: 40)
-            }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        switch section {
+        case 2:
+            return HomeHeaderView.fittingSize(availableWidth: collectionView.bounds.width, headerText: sections[section])
+        case 3:
+            return HomeHeaderView.fittingSize(availableWidth: collectionView.bounds.width, headerText: sections[section])
+        default:
             return CGSizeZero
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        switch indexPath.section {
+        case 1:
+            guard let cell = cell as? CharacterCell else { return }
+            cell.advicePositionView.alpha = 0.0
+            cell.advicePositionView.transform = CGAffineTransform(translationX: 0, y: 10)
+            cell.showViewWithAnimation()
         
-        func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-            if indexPath.section == 1, let customCell = cell as? CharacterCell {
-                customCell.advicePositionView.alpha = 0.0
-                customCell.advicePositionView.transform = CGAffineTransform(translationX: 0, y: 10)
-                
-                customCell.showViewWithAnimation()
-            }
+        default:
+            return
         }
     }
 }
