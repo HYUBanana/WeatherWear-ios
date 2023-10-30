@@ -75,7 +75,7 @@ class TabBarController: UITabBarController {
         let weekViewController = ViewController()
         configureTabBarItem(viewController: weekViewController, with: .week)
         
-        let settingViewController = SettingViewController(serviceProvider: provider)
+        let settingViewController = SettingViewController()
         configureTabBarItem(viewController: settingViewController, with: .setting)
         
         self.viewControllers = [homeViewController, detailViewController, weekViewController, settingViewController]

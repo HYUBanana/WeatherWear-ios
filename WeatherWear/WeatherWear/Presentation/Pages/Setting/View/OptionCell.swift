@@ -6,8 +6,14 @@
 //
 
 import UIKit
+import RxSwift
 
 final class OptionCell: UICollectionViewCell {
+    
+    static let identifier = "OptionCell"
+    
+    private let viewModel: OptionCellViewModel = OptionCellViewModel()
+    var disposeBag = DisposeBag()
     
     struct Metric {
         static let cellPadding: CGFloat = 17
@@ -26,7 +32,7 @@ final class OptionCell: UICollectionViewCell {
         $0.textColor = Color.degreeTitle
     }
     
-    lazy var segmentControl = SettingSegmentedControl(items: [])
+    lazy var segmentControl = SettingSegmentedControl(items: ["자동", "수동"])
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -44,6 +50,23 @@ final class OptionCell: UICollectionViewCell {
             return self.segmentControl
         }
         return super.hitTest(point, with: event)
+    }
+    
+    func bind() {
+        let input = OptionCellViewModel.Input(cellInitialized: Observable.just(()))
+        let output = viewModel.transform(input)
+        
+        output.title
+            .drive(degreeTitle.rx.text)
+            .disposed(by: disposeBag)
+    }
+    
+    static func fittingSize(availableWidth: CGFloat) -> CGSize {
+        let cell = OptionCell()
+        cell.bind()
+        
+        let targetSize = CGSize(width: availableWidth, height: UIView.layoutFittingCompressedSize.height)
+        return cell.contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
     }
     
     private func setup() {

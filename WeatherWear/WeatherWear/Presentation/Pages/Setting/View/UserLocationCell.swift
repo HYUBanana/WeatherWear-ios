@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Then
+import RxSwift
 
 protocol UserLocationCellDelegate: AnyObject {
     func radioButtonTapped(cell: UserLocationCell)
@@ -14,6 +14,11 @@ protocol UserLocationCellDelegate: AnyObject {
 }
 
 class UserLocationCell: UICollectionViewCell {
+    
+    static let identifier = "UserLocationCell"
+    
+    private let viewModel: UserLocationCellViewModel = UserLocationCellViewModel()
+    var disposeBag = DisposeBag()
     
     weak var delegate: UserLocationCellDelegate?
     
@@ -89,6 +94,35 @@ class UserLocationCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func bind() {
+        let input = UserLocationCellViewModel.Input(cellInitialized: Observable.just(()))
+        let output = viewModel.transform(input)
+        
+        output.location
+            .drive(locationLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.time
+            .drive(timeLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.temperature
+            .drive(temperatureLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.weather
+            .drive(weatherLabel.rx.text)
+            .disposed(by: disposeBag)
+    }
+    
+    static func fittingSize(availableWidth: CGFloat) -> CGSize {
+        let cell = UserLocationCell()
+        cell.bind()
+        
+        let targetSize = CGSize(width: availableWidth, height: UIView.layoutFittingCompressedSize.height)
+        return cell.contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
     }
     
     private func setup() {

@@ -7,10 +7,14 @@
 //
 
 import UIKit
+import RxSwift
 
 class ApparentTemperatureGraphCell: UICollectionViewCell {
     
     static let identifier = "ApparentTemperatureGraphCell"
+    
+    private let viewModel: ApparentTemperatureGraphCellViewModel = ApparentTemperatureGraphCellViewModel()
+    var disposeBag = DisposeBag()
     
     struct Metric {
         static let cornerRadius: CGFloat = 20
@@ -47,12 +51,12 @@ class ApparentTemperatureGraphCell: UICollectionViewCell {
     
     static func fittingSize(availableWidth: CGFloat) -> CGSize {
         let cell = ApparentTemperatureGraphCell()
-        cell.configure()
+        cell.bind()
         let targetSize = CGSize(width: availableWidth, height: UIView.layoutFittingCompressedSize.height)
         return cell.contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
     }
     
-    func configure() {
+    func bind() {
     }
     
     private func addSubviews() {

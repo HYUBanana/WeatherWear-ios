@@ -46,15 +46,15 @@ extension DetailViewController: UICollectionViewDataSource {
         switch indexPath.section {
         case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailTitleCell.identifier, for: indexPath) as! DetailTitleCell
-            cell.configure()
+            cell.bind()
             return cell
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TemperatureGraphCell.identifier, for: indexPath) as! TemperatureGraphCell
-            cell.configure()
+            cell.bind()
             return cell
         case 2:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ApparentTemperatureGraphCell.identifier, for: indexPath) as! ApparentTemperatureGraphCell
-            cell.configure()
+            cell.bind()
             return cell
         default:
             return UICollectionViewCell()

@@ -11,9 +11,8 @@ import Then
 final class SettingView: UIView {
     
     struct Metric {
-        static let collectionViewTopPadding: CGFloat = 10
-        static let collectionViewHorizontalPadding: CGFloat = 17
-        static let collectionViewBottomPadding: CGFloat = 30
+        static let collectionViewHorizontalPadding: CGFloat = 20
+        static let collectionViewBottomPadding: CGFloat = 0
         
         static let cellSpacing: CGFloat = 15
         static let titlePadding: CGFloat = 15
@@ -24,10 +23,6 @@ final class SettingView: UIView {
     }
     
     let layout = UICollectionViewFlowLayout().then {
-        $0.sectionInset = UIEdgeInsets(top: Metric.collectionViewTopPadding,
-                                       left: Metric.collectionViewHorizontalPadding,
-                                       bottom: Metric.collectionViewBottomPadding,
-                                       right: Metric.collectionViewHorizontalPadding)
         $0.minimumLineSpacing = Metric.cellSpacing
     }
     
@@ -66,7 +61,9 @@ final class SettingView: UIView {
         
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(mainLogo.snp.bottom).offset(Metric.titlePadding)
-            make.left.right.bottom.equalToSuperview()
+            make.left.equalToSuperview().offset(Metric.collectionViewHorizontalPadding)
+            make.right.equalToSuperview().offset(-Metric.collectionViewHorizontalPadding)
+            make.bottom.equalToSuperview().offset(Metric.collectionViewBottomPadding)
         }
     }
 }

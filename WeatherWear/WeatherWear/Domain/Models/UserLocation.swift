@@ -14,8 +14,4 @@ struct UserLocation: Identifiable {
     var temperature: Int
     var weather: String
     var isSelected: Bool
-    
-    var temperatureString: String {
-        String(temperature) + "°"
-    }
 }
