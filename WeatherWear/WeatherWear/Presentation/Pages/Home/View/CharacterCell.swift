@@ -20,15 +20,20 @@ final class CharacterCell: UICollectionViewCell {
     var isVisible: Bool = true
     
     struct Metric {
-        static let temperatureStackViewTopPadding: CGFloat = 10
-        static let temperatureStackViewLeadingPadding: CGFloat = 20
+        static let cornerRadius: CGFloat = 20
+        static let cellHeight: CGFloat = 430
+        
+        static let verticalPadding: CGFloat = 20
+        static let horizontalPadding: CGFloat = 20
+        static let smallVerticalPadding: CGFloat = 10
+        
         static let weatherStackViewTopPadding: CGFloat = 0
-        static let weatherStackViewLeadingPadding: CGFloat = 20
         static let weatherStackViewSpacing: CGFloat = 5
-        static let locationUpdateStackViewTopPadding: CGFloat = 20
-        static let locationUpdateStackViewTrailingPadding: CGFloat = 20
-        static let downloadCharacterButtonBottomPadding: CGFloat = 20
-        static let downloadCharacterButtonTrailingPadding: CGFloat = 20
+        
+        static let temperatureRangePadding: CGFloat = 5
+        
+        static let downloadButtonWidth: CGFloat = 30
+        static let downloadButtonHeight: CGFloat = 27
     }
     
     struct Color {
@@ -84,15 +89,18 @@ final class CharacterCell: UICollectionViewCell {
     
     let weatherImageView = UIImageView()
     
-    let characterImageView = UIImageView(image: UIImage(named: "Character"))
+    let characterImageView = UIImageView(image: UIImage(named: "Character")).then {
+        $0.contentMode = .scaleAspectFill
+    }
     
     let backgroundImageView = UIImageView(image: UIImage(named: "CharacterBackground")).then {
+        $0.alpha = 0.6
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
     }
     
     lazy var downloadButton = UIButton().then {
-        var newImage = UIImage(systemName: "arrow.down.square.fill")?.resizedImage(Size: CGSize(width: 30, height: 27))
+        var newImage = UIImage(systemName: "arrow.down.square.fill")?.resizedImage(Size: CGSize(width: Metric.downloadButtonWidth, height: Metric.downloadButtonHeight))
         newImage = newImage?.withRenderingMode(.alwaysTemplate)
         $0.setImage(newImage, for: .normal)
         $0.tintColor = Color.downloadCharacterButton
@@ -134,7 +142,7 @@ final class CharacterCell: UICollectionViewCell {
         $0.axis = .horizontal
         $0.alignment = .center
         $0.distribution = .fill
-        $0.spacing = 5
+        $0.spacing = Metric.temperatureRangePadding
     }
     
     override init(frame: CGRect) {
@@ -150,55 +158,86 @@ final class CharacterCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    static func fittingSize(availableWidth: CGFloat, weather: Weather) -> CGSize {
+        let cell = CharacterCell()
+        cell.configure(weather: weather)
+        
+        let targetSize = CGSize(width: availableWidth, height: UIView.layoutFittingCompressedSize.height)
+        return cell.contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+    }
+    
+    func configure(weather: Weather) {
+        temperatureLabel.text = weather.temperatureString
+        highestTemperatureLabel.text = weather.highestTemperatureString
+        lowestTemperatureLabel.text = weather.lowestTemperatureString
+        
+        weatherLabel.text = weather.weatherConditionString
+        weatherImageView.image = weather.weatherConditionImage
+        
+        locationLabel.text = weather.location
+        lastUpdateDateLabel.text = weather.lastUpdatedDate
+        
+        advicePositionView.faceAdvice.titleAdviceLabel.text = weather.faceAdvice.title
+        advicePositionView.faceAdvice.subAdviceLabel.text = weather.faceAdvice.description
+        
+        advicePositionView.clothesAdvice.titleAdviceLabel.text = weather.clothesAdvice.title
+        advicePositionView.clothesAdvice.subAdviceLabel.text = weather.clothesAdvice.description
+        
+        advicePositionView.itemAdvice.titleAdviceLabel.text = weather.itemAdvice.title
+        advicePositionView.itemAdvice.subAdviceLabel.text = weather.itemAdvice.description
+    }
+    
     private func setup() {
-        self.backgroundColor = .white
-        self.layer.cornerRadius = 20
+        self.layer.cornerRadius = Metric.cornerRadius
         self.layer.masksToBounds = true
     }
     
     private func addSubviews() {
-        addSubview(characterImageView)
-        addSubview(temperatureStackView)
-        addSubview(weatherStackView)
-        addSubview(locationUpdateStackView)
-        addSubview(backgroundImageView)
-        addSubview(advicePositionView)
-        addSubview(downloadButton)
+        contentView.addSubview(characterImageView)
+        contentView.addSubview(temperatureStackView)
+        contentView.addSubview(weatherStackView)
+        contentView.addSubview(locationUpdateStackView)
+        contentView.addSubview(backgroundImageView)
+        contentView.addSubview(advicePositionView)
+        contentView.addSubview(downloadButton)
         
-        self.sendSubviewToBack(backgroundImageView)
+        contentView.sendSubviewToBack(backgroundImageView)
     }
     
     private func setupConstraints() {
         characterImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+            make.height.equalTo(Metric.cellHeight)
         }
         
         temperatureStackView.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(Metric.temperatureStackViewLeadingPadding)
-            make.top.equalToSuperview().offset(Metric.temperatureStackViewTopPadding)
+            make.left.equalToSuperview().offset(Metric.horizontalPadding)
+            make.top.equalToSuperview().offset(Metric.smallVerticalPadding)
         }
         
         weatherStackView.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(Metric.weatherStackViewLeadingPadding)
+            make.left.equalToSuperview().offset(Metric.horizontalPadding)
             make.top.equalTo(temperatureStackView.snp.bottom).offset(Metric.weatherStackViewTopPadding)
         }
         
         locationUpdateStackView.snp.makeConstraints { make in
-            make.right.equalToSuperview().offset(-Metric.locationUpdateStackViewTrailingPadding)
-            make.top.equalToSuperview().offset(Metric.locationUpdateStackViewTopPadding)
+            make.right.equalToSuperview().offset(-Metric.horizontalPadding)
+            make.top.equalToSuperview().offset(Metric.verticalPadding)
         }
         
         downloadButton.snp.makeConstraints { make in
-            make.right.equalToSuperview().offset(-Metric.downloadCharacterButtonTrailingPadding)
-            make.bottom.equalToSuperview().offset(-Metric.downloadCharacterButtonBottomPadding)
+            make.right.equalToSuperview().offset(-Metric.horizontalPadding)
+            make.bottom.equalToSuperview().offset(-Metric.verticalPadding)
         }
         
         backgroundImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+            make.height.equalTo(Metric.cellHeight)
         }
         
         advicePositionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+            make.height.equalTo(Metric.cellHeight)
         }
     }
     
@@ -232,5 +271,123 @@ final class CharacterCell: UICollectionViewCell {
             self.advicePositionView.alpha = 1.0
             self.advicePositionView.transform = CGAffineTransform.identity
         }, completion: nil)
+    }
+}
+
+extension CharacterCell {
+    final class AdvicePositionView: UIView {
+        let faceAdvice = AdviceView()
+        let clothesAdvice = AdviceView()
+        let itemAdvice = AdviceView()
+        
+        override init(frame: CGRect) {
+            super.init(frame: frame)
+            setup()
+            addSubviews()
+            setupConstraints()
+        }
+        
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        private func setup() {
+            self.backgroundColor = .clear
+        }
+        
+        private func addSubviews() {
+            addSubview(faceAdvice)
+            addSubview(clothesAdvice)
+            addSubview(itemAdvice)
+        }
+        
+        private func setupConstraints() {
+            faceAdvice.snp.makeConstraints { make in
+                make.centerX.equalToSuperview().offset(100)
+                make.centerY.equalToSuperview().offset(-60)
+            }
+            
+            clothesAdvice.snp.makeConstraints { make in
+                make.centerX.equalToSuperview().offset(105)
+                make.centerY.equalToSuperview().offset(30)
+            }
+            
+            itemAdvice.snp.makeConstraints { make in
+                make.centerX.equalToSuperview().offset(-100)
+                make.centerY.equalToSuperview().offset(70)
+            }
+        }
+    }
+}
+
+extension CharacterCell {
+    final class AdviceView: UIView {
+        
+        struct Metric {
+            static let cornerRadius: CGFloat = 20
+            static let cellPadding: CGFloat = 12
+            static let adviceSpacing: CGFloat = 0
+        }
+        
+        struct Color {
+            static let titleAdviceLabel = UIColor(red: 48, green: 48, blue: 48)
+            static let subAdviceLabel = UIColor(red: 91, green: 91, blue: 91)
+            static let backgroundView = UIColor(red: 255, green: 255, blue: 255, alpha: 0.8)
+        }
+        
+        struct Font {
+            static let titleAdviceLabel = UIFont.systemFont(ofSize: 17, weight: .bold)
+            static let subAdviceLabel = UIFont.systemFont(ofSize: 13, weight: .semibold)
+        }
+        
+        let titleAdviceLabel = UILabel().then {
+            $0.textColor = Color.titleAdviceLabel
+            $0.font = Font.titleAdviceLabel
+        }
+        
+        let subAdviceLabel = UILabel().then {
+            $0.textColor = Color.subAdviceLabel
+            $0.font = Font.subAdviceLabel
+        }
+        
+        lazy var stackView = UIStackView().then {
+            $0.addArrangedSubview(titleAdviceLabel)
+            $0.addArrangedSubview(subAdviceLabel)
+            $0.axis = .vertical
+            $0.alignment = .leading
+            $0.distribution = .fill
+            $0.spacing = Metric.adviceSpacing
+        }
+        
+        lazy var backgroundView = UIView().then {
+            $0.backgroundColor = Color.backgroundView
+            $0.layer.cornerRadius = Metric.cornerRadius
+            $0.layer.masksToBounds = true
+        }
+        
+        override init(frame: CGRect) {
+            super.init(frame: frame)
+            addSubviews()
+            setupConstraints()
+        }
+        
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        private func addSubviews() {
+            addSubview(backgroundView)
+            addSubview(stackView)
+        }
+        
+        private func setupConstraints() {
+            stackView.snp.makeConstraints { make in
+                make.center.equalToSuperview()
+            }
+            
+            backgroundView.snp.makeConstraints { make in
+                make.edges.equalTo(stackView).inset(UIEdgeInsets(top: -Metric.cellPadding, left: -Metric.cellPadding, bottom: -Metric.cellPadding, right: -Metric.cellPadding))
+            }
+        }
     }
 }

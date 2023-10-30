@@ -78,9 +78,9 @@ final class OutingTimeCell: UICollectionViewCell {
     }
     
     private func addSubviews() {
-        addSubview(outingStackView)
-        addSubview(totalTimeLabel)
-        addSubview(arrowImageView)
+        contentView.addSubview(outingStackView)
+        contentView.addSubview(totalTimeLabel)
+        contentView.addSubview(arrowImageView)
     }
     
     private func setupConstraints() {

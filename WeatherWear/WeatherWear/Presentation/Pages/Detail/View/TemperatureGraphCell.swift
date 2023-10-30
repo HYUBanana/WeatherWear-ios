@@ -13,25 +13,15 @@ class TemperatureGraphCell: UICollectionViewCell {
     
     struct Metric {
         static let cornerRadius: CGFloat = 20
-        static let spacing: CGFloat = 15
+        
+        static let innerHorizontalPadding: CGFloat = 10
+        static let innerVerticalPadding: CGFloat = 15
     }
     
     struct Color {
-        static let headerLabel = UIColor(red: 48, green: 48, blue: 48)
     }
     
     struct Font {
-        static let headerLabel = UIFont.systemFont(ofSize: 20, weight: .bold)
-    }
-    
-    let headerLabel = UILabel().then {
-        $0.text = "온도와 강수량"
-        $0.font = Font.headerLabel
-        $0.textColor = Color.headerLabel
-    }
-    
-    let spacingView = UIView().then {
-        $0.backgroundColor = .clear
     }
     
     let graphContainerView = GraphContainerView()
@@ -55,35 +45,33 @@ class TemperatureGraphCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    static func fittingSize(availableWidth: CGFloat) -> CGSize {
+        let cell = TemperatureGraphCell()
+        cell.configure()
+        let targetSize = CGSize(width: availableWidth, height: UIView.layoutFittingCompressedSize.height)
+        return cell.contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+    }
+    
+    func configure() {
+    }
+    
     private func addSubviews() {
-        addSubview(headerLabel)
-        addSubview(spacingView)
-        addSubview(graphScrollView)
+        contentView.addSubview(graphScrollView)
     }
     
     private func setupConstraints() {
         
-        headerLabel.snp.makeConstraints { make in
-            make.left.top.right.equalToSuperview()
-        }
-        
-        spacingView.snp.makeConstraints { make in
-            make.top.equalTo(headerLabel.snp.bottom)
-            make.left.right.equalToSuperview()
-            make.height.equalTo(Metric.spacing)
-        }
-        
         graphScrollView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.top.equalTo(spacingView.snp.bottom)
-            make.bottom.equalToSuperview()
+            make.edges.equalToSuperview()
+            //수정 필요
+            make.height.equalTo(290)
         }
         
         graphContainerView.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(10)
-            make.right.equalToSuperview().offset(-10)
-            make.top.equalToSuperview().offset(15)
-            make.bottom.equalToSuperview().offset(-15)
+            make.left.equalToSuperview().offset(Metric.innerHorizontalPadding)
+            make.right.equalToSuperview().offset(-Metric.innerHorizontalPadding)
+            make.top.equalToSuperview().offset(Metric.innerVerticalPadding)
+            make.bottom.equalToSuperview().offset(-Metric.innerVerticalPadding)
         }
     }
 }
@@ -94,8 +82,6 @@ extension TemperatureGraphCell {
         
         struct Metric {
             static let barCount: Int = 14
-            static let barWidth: CGFloat = 36
-            static let barheight: CGFloat = 260
         }
         
         override init(frame: CGRect) {
@@ -121,7 +107,6 @@ extension TemperatureGraphCell {
                 cell.snp.makeConstraints { make in
                     make.top.equalToSuperview()
                     make.bottom.equalToSuperview()
-                    make.width.equalTo(Metric.barWidth)
                     
                     if let lastCell = lastCell {
                         make.left.equalTo(lastCell.snp.right).offset(2)
@@ -138,10 +123,6 @@ extension TemperatureGraphCell {
                     make.right.equalToSuperview()
                 }
             }
-        }
-        
-        override var intrinsicContentSize: CGSize {
-            return CGSize(width: CGFloat(Metric.barCount) * Metric.barWidth, height: Metric.barheight)
         }
     }
 }
@@ -170,6 +151,9 @@ extension TemperatureGraphCell {
             static let humidityBarWidth: CGFloat = 6
             static let humidityLabelBottomPadding: CGFloat = 4
             static let dotLabelPadding: CGFloat = 2
+            
+            static let barWidth: CGFloat = 36
+            static let barHeight: CGFloat = 260
         }
         
         struct Color {
@@ -293,6 +277,11 @@ extension TemperatureGraphCell {
         }
         
         private func setupConstraints() {
+            self.snp.makeConstraints { make in
+                make.height.equalTo(Metric.barHeight)
+                make.width.equalTo(Metric.barWidth)
+            }
+            
             weatherConditionIconImageView.snp.makeConstraints { make in
                 make.centerX.equalToSuperview()
                 make.top.equalToSuperview().offset(Metric.totalPadding)

@@ -13,26 +13,18 @@
 		D9345A642AE62F1F004B42C8 /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9345A612AE62F1F004B42C8 /* CircleView.swift */; };
 		D9345A6F2AE659AB004B42C8 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9345A692AE659AB004B42C8 /* DetailView.swift */; };
 		D9345A702AE659AB004B42C8 /* ApparentTemperatureGraphCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9345A6A2AE659AB004B42C8 /* ApparentTemperatureGraphCell.swift */; };
-		D9345A712AE659AB004B42C8 /* TitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9345A6B2AE659AB004B42C8 /* TitleCell.swift */; };
 		D9345A722AE659AB004B42C8 /* TemperatureGraphCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9345A6C2AE659AB004B42C8 /* TemperatureGraphCell.swift */; };
 		D9345A732AE659AB004B42C8 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9345A6E2AE659AB004B42C8 /* DetailViewController.swift */; };
 		D965EEA42ADD1E0200426096 /* TabBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EE872ADD1E0200426096 /* TabBarItem.swift */; };
 		D965EEA52ADD1E0200426096 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EE882ADD1E0200426096 /* TabBarController.swift */; };
-		D965EEA62ADD1E0200426096 /* TemperatureBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EE8D2ADD1E0200426096 /* TemperatureBar.swift */; };
-		D965EEA72ADD1E0200426096 /* AdviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EE8E2ADD1E0200426096 /* AdviceView.swift */; };
-		D965EEA82ADD1E0200426096 /* MainTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EE8F2ADD1E0200426096 /* MainTextCell.swift */; };
 		D965EEA92ADD1E0200426096 /* CharacterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EE902ADD1E0200426096 /* CharacterCell.swift */; };
 		D965EEAA2ADD1E0200426096 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EE912ADD1E0200426096 /* HomeView.swift */; };
-		D965EEAB2ADD1E0200426096 /* AdvicePositionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EE922ADD1E0200426096 /* AdvicePositionView.swift */; };
 		D965EEAC2ADD1E0200426096 /* ComfortIndexCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EE932ADD1E0200426096 /* ComfortIndexCell.swift */; };
-		D965EEAD2ADD1E0200426096 /* TemperatureColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EE942ADD1E0200426096 /* TemperatureColorView.swift */; };
 		D965EEAE2ADD1E0200426096 /* HomeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EE952ADD1E0200426096 /* HomeHeaderView.swift */; };
 		D965EEAF2ADD1E0200426096 /* BriefingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EE962ADD1E0200426096 /* BriefingCell.swift */; };
-		D965EEB02ADD1E0200426096 /* TriangleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EE972ADD1E0200426096 /* TriangleView.swift */; };
 		D965EEB12ADD1E0200426096 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EE992ADD1E0200426096 /* HomeViewController.swift */; };
 		D965EEB22ADD1E0200426096 /* SettingHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EE9C2ADD1E0200426096 /* SettingHeader.swift */; };
 		D965EEB32ADD1E0200426096 /* OptionCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EE9D2ADD1E0200426096 /* OptionCollectionView.swift */; };
-		D965EEB42ADD1E0200426096 /* SettingSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EE9E2ADD1E0200426096 /* SettingSegmentedControl.swift */; };
 		D965EEB52ADD1E0200426096 /* UserLocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EE9F2ADD1E0200426096 /* UserLocationCell.swift */; };
 		D965EEB62ADD1E0200426096 /* OutingTimeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EEA02ADD1E0200426096 /* OutingTimeCell.swift */; };
 		D965EEB72ADD1E0200426096 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EEA12ADD1E0200426096 /* SettingView.swift */; };
@@ -49,6 +41,10 @@
 		D965EED32ADD1E0F00426096 /* OutingTimeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EEC72ADD1E0F00426096 /* OutingTimeService.swift */; };
 		D965EED42ADD1E0F00426096 /* DegreeOptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EEC82ADD1E0F00426096 /* DegreeOptionService.swift */; };
 		D965EED52ADD1E0F00426096 /* AutoOptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D965EEC92ADD1E0F00426096 /* AutoOptionService.swift */; };
+		D969FD1E2AEF755600BCFF11 /* DetailHeaderDescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D969FD1C2AEF755600BCFF11 /* DetailHeaderDescriptionView.swift */; };
+		D969FD1F2AEF755600BCFF11 /* DetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D969FD1D2AEF755600BCFF11 /* DetailHeaderView.swift */; };
+		D969FD212AEF756000BCFF11 /* DetailTitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D969FD202AEF756000BCFF11 /* DetailTitleCell.swift */; };
+		D969FD232AEF757800BCFF11 /* HomeTitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D969FD222AEF757800BCFF11 /* HomeTitleCell.swift */; };
 		D9FA08762AB5A63B005EC223 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9FA08752AB5A63B005EC223 /* AppDelegate.swift */; };
 		D9FA08782AB5A63B005EC223 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9FA08772AB5A63B005EC223 /* SceneDelegate.swift */; };
 		D9FA087A2AB5A63B005EC223 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9FA08792AB5A63B005EC223 /* ViewController.swift */; };
@@ -90,26 +86,18 @@
 		D9345A612AE62F1F004B42C8 /* CircleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleView.swift; sourceTree = "<group>"; };
 		D9345A692AE659AB004B42C8 /* DetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		D9345A6A2AE659AB004B42C8 /* ApparentTemperatureGraphCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApparentTemperatureGraphCell.swift; sourceTree = "<group>"; };
-		D9345A6B2AE659AB004B42C8 /* TitleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleCell.swift; sourceTree = "<group>"; };
 		D9345A6C2AE659AB004B42C8 /* TemperatureGraphCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemperatureGraphCell.swift; sourceTree = "<group>"; };
 		D9345A6E2AE659AB004B42C8 /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		D965EE872ADD1E0200426096 /* TabBarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarItem.swift; sourceTree = "<group>"; };
 		D965EE882ADD1E0200426096 /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
-		D965EE8D2ADD1E0200426096 /* TemperatureBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemperatureBar.swift; sourceTree = "<group>"; };
-		D965EE8E2ADD1E0200426096 /* AdviceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdviceView.swift; sourceTree = "<group>"; };
-		D965EE8F2ADD1E0200426096 /* MainTextCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTextCell.swift; sourceTree = "<group>"; };
 		D965EE902ADD1E0200426096 /* CharacterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharacterCell.swift; sourceTree = "<group>"; };
 		D965EE912ADD1E0200426096 /* HomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
-		D965EE922ADD1E0200426096 /* AdvicePositionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdvicePositionView.swift; sourceTree = "<group>"; };
 		D965EE932ADD1E0200426096 /* ComfortIndexCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComfortIndexCell.swift; sourceTree = "<group>"; };
-		D965EE942ADD1E0200426096 /* TemperatureColorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemperatureColorView.swift; sourceTree = "<group>"; };
 		D965EE952ADD1E0200426096 /* HomeHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeHeaderView.swift; sourceTree = "<group>"; };
 		D965EE962ADD1E0200426096 /* BriefingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BriefingCell.swift; sourceTree = "<group>"; };
-		D965EE972ADD1E0200426096 /* TriangleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TriangleView.swift; sourceTree = "<group>"; };
 		D965EE992ADD1E0200426096 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		D965EE9C2ADD1E0200426096 /* SettingHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingHeader.swift; sourceTree = "<group>"; };
 		D965EE9D2ADD1E0200426096 /* OptionCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionCollectionView.swift; sourceTree = "<group>"; };
-		D965EE9E2ADD1E0200426096 /* SettingSegmentedControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingSegmentedControl.swift; sourceTree = "<group>"; };
 		D965EE9F2ADD1E0200426096 /* UserLocationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserLocationCell.swift; sourceTree = "<group>"; };
 		D965EEA02ADD1E0200426096 /* OutingTimeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OutingTimeCell.swift; sourceTree = "<group>"; };
 		D965EEA12ADD1E0200426096 /* SettingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
@@ -126,6 +114,10 @@
 		D965EEC72ADD1E0F00426096 /* OutingTimeService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OutingTimeService.swift; sourceTree = "<group>"; };
 		D965EEC82ADD1E0F00426096 /* DegreeOptionService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DegreeOptionService.swift; sourceTree = "<group>"; };
 		D965EEC92ADD1E0F00426096 /* AutoOptionService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoOptionService.swift; sourceTree = "<group>"; };
+		D969FD1C2AEF755600BCFF11 /* DetailHeaderDescriptionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailHeaderDescriptionView.swift; sourceTree = "<group>"; };
+		D969FD1D2AEF755600BCFF11 /* DetailHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailHeaderView.swift; sourceTree = "<group>"; };
+		D969FD202AEF756000BCFF11 /* DetailTitleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailTitleCell.swift; sourceTree = "<group>"; };
+		D969FD222AEF757800BCFF11 /* HomeTitleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTitleCell.swift; sourceTree = "<group>"; };
 		D9FA08722AB5A63B005EC223 /* WeatherWear.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherWear.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9FA08752AB5A63B005EC223 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D9FA08772AB5A63B005EC223 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -194,9 +186,11 @@
 		D9345A682AE659AB004B42C8 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				D969FD202AEF756000BCFF11 /* DetailTitleCell.swift */,
+				D969FD1C2AEF755600BCFF11 /* DetailHeaderDescriptionView.swift */,
+				D969FD1D2AEF755600BCFF11 /* DetailHeaderView.swift */,
 				D9345A692AE659AB004B42C8 /* DetailView.swift */,
 				D9345A6A2AE659AB004B42C8 /* ApparentTemperatureGraphCell.swift */,
-				D9345A6B2AE659AB004B42C8 /* TitleCell.swift */,
 				D9345A6C2AE659AB004B42C8 /* TemperatureGraphCell.swift */,
 			);
 			path = View;
@@ -259,17 +253,12 @@
 		D965EE8C2ADD1E0200426096 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				D965EE8D2ADD1E0200426096 /* TemperatureBar.swift */,
-				D965EE8E2ADD1E0200426096 /* AdviceView.swift */,
-				D965EE8F2ADD1E0200426096 /* MainTextCell.swift */,
+				D969FD222AEF757800BCFF11 /* HomeTitleCell.swift */,
 				D965EE902ADD1E0200426096 /* CharacterCell.swift */,
 				D965EE912ADD1E0200426096 /* HomeView.swift */,
-				D965EE922ADD1E0200426096 /* AdvicePositionView.swift */,
 				D965EE932ADD1E0200426096 /* ComfortIndexCell.swift */,
-				D965EE942ADD1E0200426096 /* TemperatureColorView.swift */,
 				D965EE952ADD1E0200426096 /* HomeHeaderView.swift */,
 				D965EE962ADD1E0200426096 /* BriefingCell.swift */,
-				D965EE972ADD1E0200426096 /* TriangleView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -296,7 +285,6 @@
 			children = (
 				D965EE9C2ADD1E0200426096 /* SettingHeader.swift */,
 				D965EE9D2ADD1E0200426096 /* OptionCollectionView.swift */,
-				D965EE9E2ADD1E0200426096 /* SettingSegmentedControl.swift */,
 				D965EE9F2ADD1E0200426096 /* UserLocationCell.swift */,
 				D965EEA02ADD1E0200426096 /* OutingTimeCell.swift */,
 				D965EEA12ADD1E0200426096 /* SettingView.swift */,
@@ -548,7 +536,6 @@
 				D9345A702AE659AB004B42C8 /* ApparentTemperatureGraphCell.swift in Sources */,
 				D965EEAF2ADD1E0200426096 /* BriefingCell.swift in Sources */,
 				D965EEB32ADD1E0200426096 /* OptionCollectionView.swift in Sources */,
-				D965EEAB2ADD1E0200426096 /* AdvicePositionView.swift in Sources */,
 				D9345A642AE62F1F004B42C8 /* CircleView.swift in Sources */,
 				D925C27C2ACF0C3200075D5D /* UIImage.swift in Sources */,
 				D9345A6F2AE659AB004B42C8 /* DetailView.swift in Sources */,
@@ -561,23 +548,21 @@
 				D925C26D2ACDF18200075D5D /* UIColor.swift in Sources */,
 				D9FA087A2AB5A63B005EC223 /* ViewController.swift in Sources */,
 				D965EED02ADD1E0F00426096 /* UserLocationService.swift in Sources */,
-				D9345A712AE659AB004B42C8 /* TitleCell.swift in Sources */,
-				D965EEA82ADD1E0200426096 /* MainTextCell.swift in Sources */,
 				D965EEA52ADD1E0200426096 /* TabBarController.swift in Sources */,
 				D965EECC2ADD1E0F00426096 /* ComfortIndexData.swift in Sources */,
-				D965EEB42ADD1E0200426096 /* SettingSegmentedControl.swift in Sources */,
+				D969FD212AEF756000BCFF11 /* DetailTitleCell.swift in Sources */,
 				D965EEB52ADD1E0200426096 /* UserLocationCell.swift in Sources */,
-				D965EEAD2ADD1E0200426096 /* TemperatureColorView.swift in Sources */,
-				D965EEB02ADD1E0200426096 /* TriangleView.swift in Sources */,
-				D965EEA62ADD1E0200426096 /* TemperatureBar.swift in Sources */,
 				D965EECD2ADD1E0F00426096 /* Advice.swift in Sources */,
 				D925C2892ACF2B8500075D5D /* String.swift in Sources */,
 				D9FA08762AB5A63B005EC223 /* AppDelegate.swift in Sources */,
 				D965EED32ADD1E0F00426096 /* OutingTimeService.swift in Sources */,
+				D969FD232AEF757800BCFF11 /* HomeTitleCell.swift in Sources */,
 				D965EEB82ADD1E0200426096 /* SettingViewController.swift in Sources */,
 				D9345A722AE659AB004B42C8 /* TemperatureGraphCell.swift in Sources */,
+				D969FD1F2AEF755600BCFF11 /* DetailHeaderView.swift in Sources */,
 				D965EEAE2ADD1E0200426096 /* HomeHeaderView.swift in Sources */,
 				D965EEA92ADD1E0200426096 /* CharacterCell.swift in Sources */,
+				D969FD1E2AEF755600BCFF11 /* DetailHeaderDescriptionView.swift in Sources */,
 				D965EECF2ADD1E0F00426096 /* BriefingData.swift in Sources */,
 				D965EECE2ADD1E0F00426096 /* Weather.swift in Sources */,
 				D965EED12ADD1E0F00426096 /* WeatherService.swift in Sources */,
@@ -587,7 +572,6 @@
 				D9FA08782AB5A63B005EC223 /* SceneDelegate.swift in Sources */,
 				D965EECA2ADD1E0F00426096 /* UserLocation.swift in Sources */,
 				D965EEA42ADD1E0200426096 /* TabBarItem.swift in Sources */,
-				D965EEA72ADD1E0200426096 /* AdviceView.swift in Sources */,
 				D965EED52ADD1E0F00426096 /* AutoOptionService.swift in Sources */,
 				D9FA08BD2AB5B96A005EC223 /* BaseViewController.swift in Sources */,
 				D965EEB22ADD1E0200426096 /* SettingHeader.swift in Sources */,

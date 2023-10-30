@@ -72,6 +72,21 @@ final class ComfortIndexCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    static func fittingSize(availableWidth: CGFloat, comfortData: ComfortIndexData) -> CGSize {
+        let cell = ComfortIndexCell()
+        cell.configure(comfortData: comfortData)
+        
+        let targetSize = CGSize(width: availableWidth, height: UIView.layoutFittingCompressedSize.height)
+        return cell.contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+    }
+    
+    func configure(comfortData: ComfortIndexData) {
+        iconLabel.text = comfortData.icon
+        stateLabel.text = comfortData.state
+        valueLabel.text = comfortData.valueTitle
+        stateLabel.textColor = comfortData.color
+    }
+    
     private func setup() {
         self.backgroundColor = .white
         self.layer.cornerRadius = Metric.cornerRadius
@@ -79,12 +94,13 @@ final class ComfortIndexCell: UICollectionViewCell {
     }
     
     private func addSubviews() {
-        addSubview(indexIconStackView)
+        contentView.addSubview(indexIconStackView)
     }
     
     private func setupConstraints() {
         indexIconStackView.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+            make.top.left.equalToSuperview().offset(15)
+            make.right.bottom.equalToSuperview().offset(-15)
         }
     }
 }

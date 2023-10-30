@@ -97,9 +97,9 @@ class UserLocationCell: UICollectionViewCell {
     }
     
     private func addSubviews() {
-        addSubview(radioButton)
-        addSubview(frontStackView)
-        addSubview(backStackView)
+        contentView.addSubview(radioButton)
+        contentView.addSubview(frontStackView)
+        contentView.addSubview(backStackView)
     }
     
     private func setupConstraints() {
