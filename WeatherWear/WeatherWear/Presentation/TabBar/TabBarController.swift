@@ -69,7 +69,7 @@ class TabBarController: UITabBarController {
         let homeViewController = HomeViewController(provider: provider)
         configureTabBarItem(viewController: homeViewController, with: .home)
         
-        let detailViewController = ViewController()
+        let detailViewController = DetailViewController()
         configureTabBarItem(viewController: detailViewController, with: .detail)
         
         let weekViewController = ViewController()
