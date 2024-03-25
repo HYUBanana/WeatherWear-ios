@@ -9,19 +9,24 @@ import UIKit
 
 final class HomeView: UIView {
     struct Metric {
-        static let mainWeatherImageViewTopPadding: CGFloat = 5
-        static let collectionViewHorizontalPadding: CGFloat = 20
-        static let collectionViewBottomPadding: CGFloat = 0
+        static let mainWeatherImageSideLength: CGFloat = 300
+        static let mainWeatherImageX: CGFloat = 200
+        static let mainWeatherImageMinY: CGFloat = -50
+        static let mainWeatherImageMaxY: CGFloat = 100
     }
     
-    let layout = UICollectionViewFlowLayout()
+    let refreshControl = AnimatedRefreshControl()
     
-    lazy var collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout).then {
+    lazy var collectionView = UICollectionView(frame: CGRectZero,
+                                               collectionViewLayout: UICollectionViewFlowLayout()).then {
         $0.backgroundColor = .clear
+        $0.isPagingEnabled = true
+        $0.contentInsetAdjustmentBehavior = .never
         $0.showsVerticalScrollIndicator = false
+        $0.refreshControl = self.refreshControl
     }
     
-    let mainWeatherImageView = UIImageView(image: UIImage(named: "MainWeather")).then {
+    let mainWeatherImageView = UIImageView(image: UIImage()).then {
         $0.alpha = 0.0
     }
     
@@ -37,7 +42,7 @@ final class HomeView: UIView {
     }
     
     private func setup() {
-        self.backgroundColor = AppColor.background(.sky).color
+        backgroundColor = .white
     }
     
     private func addSubviews() {
@@ -47,15 +52,55 @@ final class HomeView: UIView {
     
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(self.safeAreaLayoutGuide.snp.top)
-            make.left.equalToSuperview().offset(Metric.collectionViewHorizontalPadding)
-            make.right.equalToSuperview().offset(-Metric.collectionViewHorizontalPadding)
-            make.bottom.equalToSuperview().offset(-Metric.collectionViewBottomPadding)
+            make.edges.equalToSuperview()
         }
         
-        mainWeatherImageView.snp.makeConstraints { make in
-            make.top.equalTo(self.safeAreaLayoutGuide.snp.top).offset(Metric.mainWeatherImageViewTopPadding)
-            make.right.equalToSuperview()
+        mainWeatherImageView.frame = CGRect(x: Metric.mainWeatherImageX,
+                                            y: Metric.mainWeatherImageMaxY,
+                                            width: Metric.mainWeatherImageSideLength,
+                                            height: Metric.mainWeatherImageSideLength)
+    }
+}
+
+extension HomeView {
+    func applyGradientBackground(with color: UIColor) {
+        
+        if (self.layer.sublayers?.filter { $0 is CAGradientLayer } == []) {
+            let gradientLayer = CAGradientLayer()
+            gradientLayer.frame = self.bounds
+            gradientLayer.colors = [UIColor.white.cgColor, UIColor.white.cgColor]
+            gradientLayer.locations = [0.0, 1.0]
+            gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+            gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
+            
+            self.layer.insertSublayer(gradientLayer, at: 0)
+        }
+        
+        guard let gradientLayer = self.layer.sublayers?[0] as? CAGradientLayer else { return }
+        
+        changeGradientColor(on: gradientLayer, to: [color.cgColor, UIColor.white.cgColor])
+    }
+    
+    private func changeGradientColor(on layer: CAGradientLayer, to colors: [CGColor]) {
+        
+        let colorAnimation = CABasicAnimation(keyPath: "colors")
+        colorAnimation.duration = 1
+        colorAnimation.fromValue = layer.colors
+        colorAnimation.toValue = colors
+        colorAnimation.fillMode = .forwards
+        colorAnimation.isRemovedOnCompletion = false
+        
+        layer.add(colorAnimation, forKey: "colorChange")
+        layer.colors = colors
+    }
+}
+
+extension HomeView {
+    func moveMainWeatherImageView(currentOffset: CGFloat, maxScrollableHeight: CGFloat) {
+        let movingRange = Metric.mainWeatherImageMaxY - Metric.mainWeatherImageMinY
+        let newImagePositionY = (currentOffset / maxScrollableHeight) * movingRange
+        UIView.animate(withDuration: 0) {
+            self.mainWeatherImageView.frame.origin.y = Metric.mainWeatherImageMaxY - newImagePositionY
         }
     }
 }
