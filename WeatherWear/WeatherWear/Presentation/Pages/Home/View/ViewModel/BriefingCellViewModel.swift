@@ -10,25 +10,16 @@ import RxSwift
 import RxCocoa
 import UIKit.UIColor
 
-final class BriefingCellViewModel: CellViewModelType {
+final class BriefingCellViewModel {
     
-    var cellType: Sizeable.Type { return BriefingCell.self }
-    var cellIdentifier = "BriefingCell"
+    var data: BriefingCellData
     
-    private var climateFactor: ClimateFactor
-    
-    init(climateFactor: ClimateFactor) {
-        self.climateFactor = climateFactor
+    init(data: BriefingCellData) {
+        self.data = data
     }
-    
-    func bind(to cell: Sizeable) {
-        guard let cell = cell as? BriefingCell else { return }
-        cell.configure(icon: climateFactor.icon,
-                       highestValue: climateFactor.highestValue,
-                       lowestValue: climateFactor.lowestValue,
-                       title: climateFactor.name,
-                       state: climateFactor.intensity.state,
-                       stateColor: climateFactor.intensity.color,
-                       description: climateFactor.description)
-    }
+}
+
+extension BriefingCellViewModel: ViewModel {
+    var cellType: Bindable.Type { return BriefingCell.self }
+    var cellIdentifier: String { "BriefingCell" }
 }

@@ -12,53 +12,67 @@ import RxSwift
 final class HomeViewReactor: Reactor {
     
     enum Action {
-        case viewDidLoad
+        case initialize
         case toggleCharacter
+        case refresh
+        case tapGraphType(GraphType)
     }
     
     enum Mutation {
-        case setData(HomeData)
+        case setData(Weather)
         case toggleCharacter
+        case changeGraphType(GraphType)
     }
     
     struct State {
-        var homeData: HomeData?
+        var weather: Weather?
         var showAdvice: Bool
+        var graphType: GraphType
     }
     
-    let serviceProvider: ServiceProviderType
-    let formatterProvider: FormatterProviderType
-    let initialState = State(showAdvice: true)
+    let provider: RepositoryProviderType
+    let initialState = State(showAdvice: true,
+                             graphType: .all)
     
-    init(serviceProvider: ServiceProviderType, formatterProvider: FormatterProviderType) {
-        self.serviceProvider = serviceProvider
-        self.formatterProvider = formatterProvider
+    init(provider: RepositoryProviderType) {
+        self.provider = provider
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case .viewDidLoad:
-            return self.serviceProvider.weatherService.getWeather()
-                .compactMap { [weak self] weather in
-                    self?.formatterProvider.homeViewDataFormatter.transform(weather)
+        case .initialize, .refresh:
+            return provider.weatherRepository.fetchCurrentWeather()
+                .map { weather in
+                    Mutation.setData(weather)
                 }
-                .map { homeData in
-                        .setData(homeData)
-                }
+            
         case .toggleCharacter:
             return .just(.toggleCharacter)
+            
+        case let .tapGraphType(graphType):
+            return .just(.changeGraphType(graphType))
         }
     }
     
     func reduce(state: State, mutation: Mutation) -> State {
         var state = state
         switch mutation {
-        case let .setData(homeData):
-            state.homeData = homeData
+        case let .setData(weather):
+            state.weather = weather
             return state
             
         case .toggleCharacter:
             state.showAdvice = !state.showAdvice
+            return state
+            
+        case let .changeGraphType(newGraphType):
+            let previousGraphType = state.graphType
+            if previousGraphType == newGraphType {
+                state.graphType = .all
+            }
+            else if newGraphType != .unknown {
+                state.graphType = newGraphType
+            }
             return state
         }
     }

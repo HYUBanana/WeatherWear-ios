@@ -9,35 +9,18 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-final class CharacterCellViewModel: CellViewModelType {
+final class CharacterCellViewModel {
     
-    var cellType: Sizeable.Type { return CharacterCell.self }
-    var cellIdentifier = "CharacterCell"
+    var data: CharacterCellData
+    var showAdvice: Bool
     
-    private var data: HomeData
-    private var showAdvice: Bool
-    
-    init(data: HomeData, showAdvice: Bool) {
+    init(data: CharacterCellData, showAdvice: Bool) {
         self.data = data
         self.showAdvice = showAdvice
     }
-    
-    func bind(to cell: Sizeable) {
-        guard let cell = cell as? CharacterCell else { return }
-        
-        cell.configure(temperature: data.temperature,
-                       highestTemperature: data.highestTemperature,
-                       lowestTemperature: data.lowestTemperature,
-                       weather: data.simpleWeather,
-                       weatherImage: data.simpleIcon,
-                       location: data.location,
-                       lastUpdateTime: data.updateTime,
-                       faceAdviceTitle: data.faceAdvice.title,
-                       faceAdviceDescription: data.faceAdvice.description,
-                       clothesAdviceTitle: data.clothesAdvice.title,
-                       clothesAdviceDescription: data.clothesAdvice.description,
-                       itemAdviceTitle: data.itemAdvice.title,
-                       itemAdviceDescription: data.itemAdvice.description,
-                       showAdvice: showAdvice)
-    }
+}
+
+extension CharacterCellViewModel: ViewModel {
+    var cellType: Bindable.Type { return CharacterCell.self }
+    var cellIdentifier: String { "CharacterCell" }
 }
