@@ -9,7 +9,8 @@ import UIKit
 
 class TabBarController: UITabBarController {
     
-    let provider: ServiceProviderType
+    let serviceProvider: ServiceProviderType
+    let formatterProvider: FormatterProviderType
     
     lazy var shadowView = UIView().then {
         $0.frame = tabBar.frame
@@ -39,8 +40,9 @@ class TabBarController: UITabBarController {
         static let shadowColor = UIColor.black
     }
     
-    init(provider: ServiceProviderType) {
-        self.provider = provider
+    init(serviceProvider: ServiceProviderType, formatterProvider: FormatterProviderType) {
+        self.serviceProvider = serviceProvider
+        self.formatterProvider = formatterProvider
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -66,16 +68,19 @@ class TabBarController: UITabBarController {
     }
     
     private func addViewControllers() {
-        let homeViewController = HomeViewController(provider: provider)
+        let homeReactor = HomeViewReactor(serviceProvider: serviceProvider, formatterProvider: formatterProvider)
+        let homeViewController = HomeViewController(reactor: homeReactor)
         configureTabBarItem(viewController: homeViewController, with: .home)
         
-        let detailViewController = DetailViewController()
+        let detailReactor = DetailViewReactor(serviceProvider: serviceProvider, formatterProvider: formatterProvider)
+        let detailViewController = DetailViewController(reactor: detailReactor)
         configureTabBarItem(viewController: detailViewController, with: .detail)
         
         let weekViewController = ViewController()
         configureTabBarItem(viewController: weekViewController, with: .week)
         
-        let settingViewController = SettingViewController()
+        let settingReactor = SettingViewReactor(serviceProvider: serviceProvider, formatterProvider: formatterProvider)
+        let settingViewController = SettingViewController(reactor: settingReactor)
         configureTabBarItem(viewController: settingViewController, with: .setting)
         
         self.viewControllers = [homeViewController, detailViewController, weekViewController, settingViewController]

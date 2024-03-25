@@ -16,7 +16,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let serviceProvider: ServiceProviderType = MockServiceProvider()
-        let tabBarController = TabBarController(provider: serviceProvider)
+        let formatterProvider: FormatterProviderType = MockFormatterProvider()
+        let tabBarController = TabBarController(serviceProvider: serviceProvider,
+                                                formatterProvider: formatterProvider)
 
         window = UIWindow(windowScene: windowScene)
         window?.rootViewController = tabBarController
