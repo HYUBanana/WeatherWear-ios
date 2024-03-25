@@ -7,19 +7,22 @@
 
 import UIKit
 import RxSwift
+import RxRelay
+import ReactorKit
 
-class HomeViewController: BaseViewController<HomeView> {
+class HomeViewController: BaseViewController<HomeView>, View {
     
-    //let viewModels: [any ViewModelType] = [HomeTitleCellViewModel(provider: WeatherService())]
+    private let dataSource = BehaviorRelay<CollectionViewAdapterDataSource?>(value: nil)
+    
+    private lazy var adapter = CollectionViewAdapter(collectionView: contentView.collectionView,
+                                                     dataSource: dataSource,
+                                                     delegate: self)
+    
     var disposeBag = DisposeBag()
     
-    let provider: ServiceProviderType
-    
-    let sections = ["메인 텍스트", "캐릭터", "오늘의 브리핑", "생활 지수"]
-    
-    init(provider: ServiceProviderType) {
-        self.provider = provider
+    init(reactor: HomeViewReactor) {
         super.init(nibName: nil, bundle: nil)
+        self.reactor = reactor
     }
     
     required init?(coder: NSCoder) {
@@ -28,146 +31,85 @@ class HomeViewController: BaseViewController<HomeView> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //_ = adapter
         
-        registerCells()
-        setup()
+        adapter.rx.touch
+            .filter { $0 is CharacterCellViewModel }
+            .map { _ in Reactor.Action.toggleCharacter }
+            .bind(to: reactor!.action)
+            .disposed(by: disposeBag)
     }
     
-    private func registerCells() {
-        self.contentView.collectionView.register(HomeTitleCell.self, forCellWithReuseIdentifier: HomeTitleCell.identifier)
-        self.contentView.collectionView.register(CharacterCell.self, forCellWithReuseIdentifier: CharacterCell.identifier)
-        self.contentView.collectionView.register(BriefingCell.self, forCellWithReuseIdentifier: BriefingCell.identifier)
-        self.contentView.collectionView.register(ComfortIndexCell.self, forCellWithReuseIdentifier: ComfortIndexCell.identifier)
-        self.contentView.collectionView.register(HomeHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HomeHeaderView.identifier)
+    func bind(reactor: HomeViewReactor) {
+        rx.viewDidLoad
+            .map { Reactor.Action.viewDidLoad }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        Observable.combineLatest(
+            reactor.state.asObservable().compactMap { $0.homeData },
+            reactor.state.asObservable().map { $0.showAdvice })
+        .map { [weak self] data, advice in
+            self?.makeDataSource(data: data, showAdvice: advice)
+        }
+        .bind(to: self.dataSource)
+        .disposed(by: disposeBag)
     }
     
-    private func setup() {
-        contentView.collectionView.dataSource = self
-        contentView.collectionView.delegate = self
+    private func makeDataSource(data: HomeData, showAdvice: Bool) -> CollectionViewAdapterDataSource {
+        
+        let cells = build {
+            SpacingCellViewModel(spacing: 30)
+            
+            TextCellViewModel(text: data.date,
+                              font: AppFont.header(.H4(.semibold)),
+                              color: AppColor.text(.tertiaryDarkText))
+            SpacingCellViewModel(spacing: 5)
+            TextCellViewModel(text: data.randomTitle,
+                              font: AppFont.header(.H1(.bold)),
+                              color: AppColor.text(.primaryDarkText))
+            SpacingCellViewModel(spacing: 10)
+            TextCellViewModel(text: data.weatherSummary,
+                              font: AppFont.description(.D1(.semibold)),
+                              color: AppColor.text(.primaryDarkText))
+            
+            SpacingCellViewModel(spacing: 30)
+            
+            CharacterCellViewModel(data: data, showAdvice: showAdvice)
+            
+            SpacingCellViewModel(spacing: 30)
+            
+            TextCellViewModel.header(text: "오늘의 브리핑")
+            SpacingCellViewModel(spacing: 10)
+            
+            for climateFactor in data.climateFactor {
+                BriefingCellViewModel(climateFactor: climateFactor)
+                SpacingCellViewModel(spacing: 15)
+            }
+            
+            SpacingCellViewModel(spacing: 15)
+            
+            TextCellViewModel.header(text: "생활 지수")
+            SpacingCellViewModel(spacing: 15)
+            
+            for livingIndex in data.livingIndex {
+                ComfortIndexCellViewModel(livingIndex: livingIndex)
+            }
+        }
+        
+        return DataSource(cells)
     }
+}
+
+extension HomeViewController: CollectionViewAdapterDelegate {
 }
 
 extension HomeViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
         UIView.animate(withDuration: 1.0) { [weak self] in
             self?.contentView.mainWeatherImageView.alpha = 1.0
-        }
-    }
-}
-
-extension HomeViewController: CharacterCellDelegate {
-    func downloadButtonTapped() {
-        let alertController = UIAlertController(title: "", message: "다운로드 로직", preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        self.present(alertController, animated: true)
-    }
-}
-
-extension HomeViewController: UICollectionViewDataSource {
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 4
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        switch section {
-        case 0:
-            return 1
-        case 1:
-            return 1
-        case 2:
-            return 4
-        case 3:
-            return 4
-        default:
-            return 0
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch indexPath.section {
-        case 0:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeTitleCell.identifier, for: indexPath) as! HomeTitleCell
-            cell.bind()
-            return cell
-            
-        case 1:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterCell.identifier, for: indexPath) as! CharacterCell
-            cell.bind()
-            cell.delegate = self
-            return cell
-            
-        case 2:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BriefingCell.identifier, for: indexPath) as! BriefingCell
-            cell.bind()
-            return cell
-            
-        case 3:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ComfortIndexCell.identifier, for: indexPath) as! ComfortIndexCell
-            cell.bind()
-            return cell
-            
-        default:
-            return UICollectionViewCell()
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        switch kind {
-        case UICollectionView.elementKindSectionHeader:
-            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HomeHeaderView.identifier, for: indexPath) as! HomeHeaderView
-            headerView.configure(headerText: sections[indexPath.section])
-            return headerView
-        
-        default:
-            return UICollectionReusableView()
-        }
-    }
-}
-
-extension HomeViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        switch indexPath.section {
-        case 0:
-            return HomeTitleCell.fittingSize(availableWidth: collectionView.bounds.width)
-            
-        case 1:
-            return CharacterCell.fittingSize(availableWidth: collectionView.bounds.width)
-            
-        case 2:
-            return BriefingCell.fittingSize(availableWidth: collectionView.bounds.width)
-            
-        case 3:
-            return ComfortIndexCell.fittingSize(availableWidth: (collectionView.bounds.width - 13)/2.0)
-            
-        default:
-            return CGSize.zero
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        switch section {
-        case 2:
-            return HomeHeaderView.fittingSize(availableWidth: collectionView.bounds.width, headerText: sections[section])
-        case 3:
-            return HomeHeaderView.fittingSize(availableWidth: collectionView.bounds.width, headerText: sections[section])
-        default:
-            return CGSizeZero
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        switch indexPath.section {
-        case 1:
-            guard let cell = cell as? CharacterCell else { return }
-            cell.advicePositionView.alpha = 0.0
-            cell.advicePositionView.transform = CGAffineTransform(translationX: 0, y: 10)
-            cell.showViewWithAnimation()
-        
-        default:
-            return
         }
     }
 }

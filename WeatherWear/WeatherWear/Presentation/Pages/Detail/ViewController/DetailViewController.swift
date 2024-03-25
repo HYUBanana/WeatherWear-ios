@@ -6,109 +6,70 @@
 //
 
 import UIKit
+import RxSwift
+import RxRelay
+import ReactorKit
 
-class DetailViewController: BaseViewController<DetailView> {
+class DetailViewController: BaseViewController<DetailView>, View {
+    
+    private let dataSource = BehaviorRelay<CollectionViewAdapterDataSource?>(value: nil)
+    
+    private lazy var adapter = CollectionViewAdapter(collectionView: contentView.collectionView,
+                                                     dataSource: dataSource,
+                                                     delegate: self)
+    
+    var disposeBag = DisposeBag()
+    
+    init(reactor: DetailViewReactor) {
+        super.init(nibName: nil, bundle: nil)
+        self.reactor = reactor
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        registerCells()
-        setup()
+        _ = adapter
     }
     
-    private func registerCells() {
-        self.contentView.collectionView.register(DetailTitleCell.self, forCellWithReuseIdentifier: DetailTitleCell.identifier)
+    func bind(reactor: DetailViewReactor) {
         
-        self.contentView.collectionView.register(TemperatureGraphCell.self, forCellWithReuseIdentifier: TemperatureGraphCell.identifier)
+        rx.viewDidLoad
+            .map { Reactor.Action.viewDidLoad }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
         
-        self.contentView.collectionView.register(ApparentTemperatureGraphCell.self, forCellWithReuseIdentifier: ApparentTemperatureGraphCell.identifier)
-        
-        self.contentView.collectionView.register(DetailHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: DetailHeaderView.identifier)
-        
-        self.contentView.collectionView.register(DetailHeaderDescriptionView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: DetailHeaderDescriptionView.identifier)
+        reactor.state.asObservable()
+            .compactMap { $0.detailData }
+            .map { [weak self] in self?.makeDataSource(data: $0) }
+            .bind(to: self.dataSource)
+            .disposed(by: disposeBag)
     }
     
-    private func setup() {
-        contentView.collectionView.dataSource = self
-        contentView.collectionView.delegate = self
+    private func makeDataSource(data: DetailData) -> CollectionViewAdapterDataSource {
+        let cells = build {
+            SpacingCellViewModel(spacing: 20)
+            
+            TemperatureOverviewCellViewModel(data: data)
+            
+            SpacingCellViewModel(spacing: 30)
+            
+            WeatherGraphCellViewModel(graphData: data.graph)
+            
+            SpacingCellViewModel(spacing: 30)
+            
+            TextCellViewModel.header(text: "체감 온도")
+            SpacingCellViewModel(spacing: 7)
+            TextCellViewModel.headerDescription(text: data.apparentTemperatureDescription)
+            SpacingCellViewModel(spacing: 15)
+            ApparentTemperatureGraphCellViewModel(graphData: data.graph)
+        }
+        
+        return DataSource(cells)
     }
 }
 
-extension DetailViewController: UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 3
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch indexPath.section {
-        case 0:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailTitleCell.identifier, for: indexPath) as! DetailTitleCell
-            cell.bind()
-            return cell
-        case 1:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TemperatureGraphCell.identifier, for: indexPath) as! TemperatureGraphCell
-            cell.bind()
-            return cell
-        case 2:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ApparentTemperatureGraphCell.identifier, for: indexPath) as! ApparentTemperatureGraphCell
-            cell.bind()
-            return cell
-        default:
-            return UICollectionViewCell()
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        switch kind {
-        case UICollectionView.elementKindSectionHeader:
-            if indexPath.section == 1 {
-                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DetailHeaderView.identifier, for: indexPath) as! DetailHeaderView
-                headerView.configure()
-                return headerView
-            }
-                
-            else if indexPath.section == 2 {
-                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DetailHeaderDescriptionView.identifier, for: indexPath) as! DetailHeaderDescriptionView
-                headerView.configure()
-                return headerView
-            }
-            
-            else { return UICollectionReusableView() }
-            
-        default:
-            return UICollectionReusableView()
-        }
-    }
-}
-
-extension DetailViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        switch indexPath.section {
-        case 0:
-            return DetailTitleCell.fittingSize(availableWidth: collectionView.bounds.width)
-        case 1:
-            return TemperatureGraphCell.fittingSize(availableWidth: collectionView.bounds.width)
-            
-        case 2:
-            return ApparentTemperatureGraphCell.fittingSize(availableWidth: collectionView.bounds.width)
-        default:
-            return CGSizeZero
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        switch section {
-        case 1:
-            return DetailHeaderView.fittingSize(availableWidth: collectionView.bounds.width)
-            
-        case 2:
-            return DetailHeaderDescriptionView.fittingSize(availableWidth: collectionView.bounds.width)
-            
-        default:
-            return CGSizeZero
-        }
-    }
+extension DetailViewController: CollectionViewAdapterDelegate {
 }
