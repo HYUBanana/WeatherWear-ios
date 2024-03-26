@@ -7,20 +7,16 @@
 
 import Foundation
 
-final class ImageCellViewModel: CellViewModelType {
-    var cellType: Sizeable.Type { return ImageCell.self }
-    
-    var cellIdentifier = "ImageCell"
-    
-    private var image: String
+final class ImageCellViewModel {
+
+    var image: String
     
     init(image: String) {
         self.image = image
     }
-    
-    func bind(to cell: Sizeable) {
-        guard let cell = cell as? ImageCell else { return }
-        cell.configure(image: image, contentMode: .scaleAspectFit)
-    }
 }
 
+extension ImageCellViewModel: ViewModel {
+    var cellType: Bindable.Type { return ImageCell.self }
+    var cellIdentifier: String { "ImageCell" }
+}

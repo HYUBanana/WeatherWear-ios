@@ -7,7 +7,8 @@
 
 import UIKit
 
-final class SpacingCell: UICollectionViewCell {
+final class SpacingCell: BaseCell {
+    
     let view = UIView().then {
         $0.backgroundColor = .clear
     }
@@ -32,15 +33,9 @@ final class SpacingCell: UICollectionViewCell {
     }
 }
 
-extension SpacingCell: Sizeable {
-    
-    func fittingSize(availableWidth: CGFloat, with viewModel: CellViewModelType) -> CGSize {
-        
-        let cell = SpacingCell()
-
-        viewModel.bind(to: cell)
-
-        let targetSize = CGSize(width: availableWidth, height: UIView.layoutFittingCompressedSize.height)
-        return cell.contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+extension SpacingCell: Bindable {
+    func bind(with model: ViewModel) {
+        guard let model = model as? SpacingCellViewModel else { return }
+        configure(spacing: model.spacing)
     }
 }
