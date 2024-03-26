@@ -15,13 +15,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        let serviceProvider: ServiceProviderType = MockServiceProvider()
-        let formatterProvider: FormatterProviderType = MockFormatterProvider()
-        let tabBarController = TabBarController(serviceProvider: serviceProvider,
-                                                formatterProvider: formatterProvider)
-
+        let provider: RepositoryProviderType = RepositoryProvider()
+        let reactor = HomeViewReactor(provider: provider)
+        let homeViewController = HomeViewController(reactor: reactor)
+            
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = tabBarController
+        window?.rootViewController = homeViewController
         window?.makeKeyAndVisible()
         
     }
