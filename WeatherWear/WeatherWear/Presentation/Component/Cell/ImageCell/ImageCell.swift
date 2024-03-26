@@ -7,7 +7,8 @@
 
 import UIKit
 
-final class ImageCell: UICollectionViewCell {
+final class ImageCell: BaseCell {
+    
     let imageView = UIImageView()
     
     override init(frame: CGRect) {
@@ -21,9 +22,9 @@ final class ImageCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(image: String, contentMode: ImageContentMode) {
+    func configure(image: String) {
         imageView.image = UIImage(named: image)
-        imageView.contentMode = contentMode.mode
+        imageView.contentMode = .scaleAspectFit
     }
     
     private func addSubviews() {
@@ -37,29 +38,9 @@ final class ImageCell: UICollectionViewCell {
     }
 }
 
-extension ImageCell: Sizeable {
-    func fittingSize(availableWidth: CGFloat, with viewModel: CellViewModelType) -> CGSize {
-        let cell = ImageCell()
-        viewModel.bind(to: cell)
-        
-        let targetSize = CGSize(width: availableWidth, height: UIView.layoutFittingCompressedSize.height)
-        return cell.contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
-    }
-}
-
-enum ImageContentMode {
-    case scaleToFill
-    case scaleAspectFit
-    case scaleAspectFill
-
-    var mode: UIView.ContentMode {
-        switch self {
-        case .scaleToFill:
-            return .scaleToFill
-        case .scaleAspectFit:
-            return .scaleAspectFit
-        case .scaleAspectFill:
-            return .scaleAspectFill
-        }
+extension ImageCell: Bindable {
+    func bind(with model: ViewModel) {
+        guard let model = model as? ImageCellViewModel else { return }
+        configure(image: model.image)
     }
 }

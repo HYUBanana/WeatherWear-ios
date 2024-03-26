@@ -7,19 +7,16 @@
 
 import Foundation
 
-final class SpacingCellViewModel: CellViewModelType {
-    var cellType: Sizeable.Type { return SpacingCell.self }
+final class SpacingCellViewModel {
     
-    var cellIdentifier = "SpacingCell"
-    
-    private var spacing: CGFloat
+    let spacing: CGFloat
     
     init(spacing: CGFloat) {
         self.spacing = spacing
     }
-    
-    func bind(to cell: Sizeable) {
-        guard let cell = cell as? SpacingCell else { return }
-        cell.configure(spacing: spacing)
-    }
+}
+
+extension SpacingCellViewModel: ViewModel {
+    var cellType: Bindable.Type { return SpacingCell.self }
+    var cellIdentifier: String { "SpacingCell" }
 }
