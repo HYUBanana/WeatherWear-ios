@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "lottie-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/airbnb/lottie-ios",
+      "state" : {
+        "branch" : "master",
+        "revision" : "8430111d0aba82347c20f7c3f51486c07531d8ab"
+      }
+    },
+    {
       "identity" : "reactorkit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ReactorKit/ReactorKit",
